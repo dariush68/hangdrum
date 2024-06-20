@@ -1,0 +1,71 @@
+
+.note{
+    text-decoration: none;
+    color: darkgrey;
+}
+.note-green{
+    text-decoration: none;
+    color: limegreen;
+}
+
+.note-selected{
+    border: 1px solid darkorange;
+    border-radius: 50%;
+    font-weight: bold;
+    /*padding: 2px;*/
+}
+
+/*body {*/
+/*    font-family: Arial, sans-serif;*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*    align-items: center;*/
+/*    height: 100vh;*/
+/*    background-color: #f0f0f0;*/
+/*}*/
+
+/*.container {*/
+/*    text-align: center;*/
+/*    background: white;*/
+/*    padding: 20px;*/
+/*    border-radius: 10px;*/
+/*    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);*/
+/*}*/
+
+/*input, button {*/
+/*    margin: 10px 0;*/
+/*    padding: 10px;*/
+/*    font-size: 16px;*/
+/*}*/
+
+/*button {*/
+/*    cursor: pointer;*/
+/*    background-color: #007BFF;*/
+/*    color: white;*/
+/*    border: none;*/
+/*    border-radius: 5px;*/
+/*}*/
+
+/*button:hover {*/
+/*    background-color: #0056b3;*/
+/*}*/
+
+/*#musicSheet {*/
+/*    margin: 20px 0;*/
+/*    display: grid;*/
+/*    grid-template-columns: repeat(16, 1fr);*/
+/*    gap: 10px;*/
+/*}*/
+
+/*.note-input {*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    justify-content: center;*/
+/*    align-items: center;*/
+/*}*/
+
+/*.note {*/
+/*    width: 60px;*/
+/*    padding: 5px;*/
+/*    text-align: center;*/
+/*}*/
