@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    {% load static %}
+
+    <link rel="stylesheet" href="{% static 'Core/css/3party/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'Core/css/styles.css' %}">
+
+    <!-- fonts -->
+    <style>
+        .hangdrum-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .hangdrum-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .section {
+            position: absolute;
+            width: 100px; /* Adjust width */
+            height: 100px; /* Adjust height */
+            background-color: rgba(255, 0, 0, 0.5); /* Color and opacity */
+            border-radius: 50%; /* Make it circular */
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .section span {
+            color: #ffffff;
+            margin-left: 50px;
+            margin-top: 50px;
+            font-weight: bold;
+        }
+
+        .section:hover {
+            background-color: rgba(255, 0, 0, 0.7); /* Change color on hover */
+        }
+
+    </style>
+
+    {% block css %}
+    {% endblock %}
+
+</head>
+
+<body style="background-color: #fafafa; font-family: 'Vazirmatn'">
+
+<div class="container-fluid">
+    {% block content %}{% endblock content %}
+</div>
+
+
+<div class="toast align-items-center" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+        <div id="toast_body" class="toast-body">
+            Fail to signin.
+        </div>
+        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+</div>
+
+<script type="text/javascript" src={% static 'Core/js/3party/bootstrap.bundle.min.js' %}></script>
+<script type="text/javascript" src={% static 'Core/js/3party/jquery-3.7.1.min.js' %}></script>
+<script type="text/javascript" src={% static 'Core/js/base.js' %}></script>
+
+{% block script %}
+{% endblock script %}
+</body>
+</html>

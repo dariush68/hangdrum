@@ -1,0 +1,156 @@
+<html>
+
+{#{% extends "Core/Base.html" %}#}
+{% load static %}
+
+<head>
+    <!-- fonts -->
+    <style>
+
+        /* Thin */
+        @font-face {
+            font-family: 'Vazirmatn';
+            src: url('{% static 'Core/fonts/Vazirmatn-Thin.ttf' %}');
+            font-style: normal;
+            font-weight: 100;
+        }
+
+        /* Extra Light */
+        @font-face {
+            font-family: 'Vazirmatn';
+            src: url('{% static 'Core/fonts/Vazirmatn-ExtraLight.ttf' %}');
+            font-style: normal;
+            font-weight: 200;
+        }
+
+        /* Light */
+        @font-face {
+            font-family: 'Vazirmatn';
+            src: url('{% static 'Core/fonts/Vazirmatn-Light.ttf' %}');
+            font-style: normal;
+            font-weight: 300;
+        }
+
+        /* Normal */
+        @font-face {
+            font-family: 'Vazirmatn';
+            src: url('{% static 'Core/fonts/Vazirmatn-Regular.ttf' %}');
+            font-style: normal;
+            font-weight: 400;
+        }
+
+        /* Medium */
+        @font-face {
+            font-family: 'Vazirmatn';
+            src: url('{% static 'Core/fonts/Vazirmatn-Medium.ttf' %}');
+            font-style: normal;
+            font-weight: 500;
+        }
+
+        /* Semi Bold */
+        @font-face {
+            font-family: 'Vazirmatn';
+            src: url('{% static 'Core/fonts/Vazirmatn-SemiBold.ttf' %}');
+            font-style: normal;
+            font-weight: 600;
+        }
+
+        /* Bold */
+        @font-face {
+            font-family: 'Vazirmatn';
+            src: url('{% static 'Core/fonts/Vazirmatn-Bold.ttf' %}');
+            font-style: normal;
+            font-weight: 700;
+        }
+
+        /* Extra Black */
+        @font-face {
+            font-family: 'Vazirmatn';
+            src: url('{% static 'Core/fonts/Vazirmatn-ExtraBold.ttf' %}');
+            font-style: normal;
+            font-weight: 800;
+        }
+
+        /* Black */
+        @font-face {
+            font-family: 'Vazirmatn';
+            src: url('{% static 'Core/fonts/Vazirmatn-Black.ttf' %}');
+            font-style: normal;
+            font-weight: 900;
+        }
+
+    </style>
+    <title>ورود</title>
+    <link rel="stylesheet" href="{% static 'Core/css/signin.css' %}">
+</head>
+
+<body>
+
+<section class="ftco-section" dir="rtl" style="font-family: 'Vazirmatn'">
+    <div class="container">
+        <!-- head -->
+        <div class="row justify-content-center">
+            <div class="col-md-6 text-center mb-5">
+                <h2 class="heading-section"></h2>
+            </div>
+        </div>
+        <!-- form -->
+        <div class="row justify-content-center">
+            <div class="col-md-12 col-lg-10">
+                <div class="wrap d-md-flex">
+                    <div class="img" style="background-image: url({% static 'Core/images/back-hanfdrum.jpg' %});"></div>
+                    <div class="login-wrap p-4 p-md-5">
+                        <div class="d-flex">
+                            <div class="w-100">
+                                <h3 class="mb-4 d-flex justify-content-start" style="font-family: 'Vazirmatn'">ورود</h3>
+                            </div>
+                            <!-- Twitter facebook icon -->
+                            <div class="w-100 d-none">
+                                <p class="social-media d-flex justify-content-end">
+                                    <a href="#"
+                                       class="social-icon d-flex align-items-center justify-content-center"><span
+                                            class="fa fa-facebook"></span></a>
+                                    <a href="#"
+                                       class="social-icon d-flex align-items-center justify-content-center"><span
+                                            class="fa fa-twitter"></span></a>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="signin-form">
+                            <div class="form-group mb-3">
+                                <label class="label d-flex  justify-content-start" for="name">نام کاربری</label>
+                                <input id="inputUsername" type="text" class="form-control" placeholder="نام کاربری"
+                                       required>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="label d-flex  justify-content-start" for="password">رمز عبور</label>
+                                <input id="inputPassword" type="password" class="form-control" placeholder="رمز عبور"
+                                       required>
+                            </div>
+                            <div class="form-group">
+                                <button type="btn" onclick="login()"
+                                        class="form-control btn btn-primary rounded submit px-3">ورود
+                                </button>
+                            </div>
+                            <div class="form-group d-md-flex">
+                                <div class="w-50 text-md-right">
+                                    <a href="#">فراموشی رمز</a>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-center">درخواست <a data-toggle="tab" href="#">عضویت</a></p>
+                        <p id="p_error" class="small text-danger"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</section>
+
+<script type="text/javascript" src={% static 'Core/js/3party/jquery-3.7.1.min.js' %}></script>
+<script src="{% static 'Core/js/base.js' %}"></script>
+<script src="{% static 'Core/js/signin.js' %}"></script>
+</body>
+</html>
