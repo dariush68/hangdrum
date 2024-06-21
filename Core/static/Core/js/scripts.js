@@ -1,8 +1,8 @@
-let currentNoteId = -1;
-let currentBur = 1;
+let currentNoteId = null;
+let currentBur = 1; //-- bar number
 
-document.getElementById('addNote').addEventListener('click', addNote);
-document.getElementById('playButton').addEventListener('click', playNotes);
+// document.getElementById('addNote').addEventListener('click', addNote);
+// document.getElementById('playButton').addEventListener('click', playNotes);
 document.getElementById('btnAddBar').addEventListener('click', addBar);
 document.getElementById('btnPlay').addEventListener('click', play);
 
@@ -10,6 +10,151 @@ document.getElementById('btnPlay').addEventListener('click', play);
 var myModal = new bootstrap.Modal(document.getElementById('myModal'))
 
 // myModal.show()
+/*
+*
+* */
+document.addEventListener('keydown', function(event) {
+
+    console.log(currentNoteId)
+    if(currentNoteId == null) return;
+
+    // console.log(event.keyCode)
+
+    switch (event.keyCode){
+        //-- "1"
+        case 49:
+            $(`#${currentNoteId}`).text(1);
+            break;
+        //-- "2"
+        case 50:
+            $(`#${currentNoteId}`).text(2);
+            break;
+        //-- "3"
+        case 51:
+            $(`#${currentNoteId}`).text(3);
+            break;
+        //-- "4"
+        case 52:
+            $(`#${currentNoteId}`).text(4);
+            break;
+        //-- "5"
+        case 53:
+            $(`#${currentNoteId}`).text(5);
+            break;
+        //-- "6"
+        case 54:
+            $(`#${currentNoteId}`).text(6);
+            break;
+        //-- "7"
+        case 55:
+            $(`#${currentNoteId}`).text(7);
+            break;
+        //-- "8"
+        case 56:
+            $(`#${currentNoteId}`).text(8);
+            break;
+        //-- "D"
+        case 68:
+            $(`#${currentNoteId}`).text('D');
+            break;
+        //-- "Left Arrow"
+        case 37:
+            selectNote(leftIndex(currentNoteId));
+            break;
+        //-- "Right Arrow"
+        case 39:
+            selectNote(rightIndex(currentNoteId));
+            break;
+        //-- "Down Arrow"
+        case 40:
+            selectNote(upIndex(currentNoteId));
+            break;
+        //-- "Up Arrow"
+        case 38:
+            selectNote(downIndex(currentNoteId));
+            break;
+    }
+
+
+});
+
+function rightIndex(noteId){
+    if(noteId == null) return "";
+    let items = getBarBitCord(noteId)
+    let bar = parseInt(items[0])
+    let bit = parseInt(items[1])
+    let chord = parseInt(items[2])
+
+    if(bit < 16) bit++;
+    else if(bit === 16){
+        if(currentBur > 1){
+            bit = 1;
+            bar++;
+        }
+    }
+
+    let newId = `note-bar-${bar}-bit-${bit}-${chord}`;
+
+    return newId;
+}
+
+function leftIndex(noteId){
+    if(noteId == null) return "";
+    let items = getBarBitCord(noteId)
+    let bar = parseInt(items[0])
+    let bit = parseInt(items[1])
+    let chord = parseInt(items[2])
+
+    if(bit > 1) bit--;
+    else if(bit === 1){
+        if(bar > 1){
+            bit = 16;
+            bar--;
+        }
+    }
+
+    let newId = `note-bar-${bar}-bit-${bit}-${chord}`;
+
+    return newId;
+}
+
+function downIndex(noteId){
+    if(noteId == null) return "";
+    let items = getBarBitCord(noteId)
+    let bar = parseInt(items[0])
+    let bit = parseInt(items[1])
+    let chord = parseInt(items[2])
+
+    if(chord > 1) chord--;
+    else if(bar > 1){
+        bar--;
+        chord = 3;
+    }
+
+    let newId = `note-bar-${bar}-bit-${bit}-${chord}`;
+
+    return newId;
+}
+
+function upIndex(noteId){
+    if(noteId == null) return "";
+    let items = getBarBitCord(noteId)
+    let bar = parseInt(items[0])
+    let bit = parseInt(items[1])
+    let chord = parseInt(items[2])
+
+    if(chord < 3) chord++;
+    else if(bar < currentBur - 1){
+        bar++;
+        chord = 1;
+    }
+
+    let newId = `note-bar-${bar}-bit-${bit}-${chord}`;
+
+    return newId;
+}
+
+
 
 function createMusicSheet() {
     const musicSheet = document.getElementById('musicSheet');
@@ -190,8 +335,7 @@ function selectNote(noteId) {
     currentNoteId = noteId;
     $('.note').removeClass('note-selected')
     $(`#${currentNoteId}`).addClass('note-selected')
-
-    // myModal.show()
+        // myModal.show()
 }
 
 document.querySelectorAll('.section').forEach(section => {
@@ -199,7 +343,9 @@ document.querySelectorAll('.section').forEach(section => {
         const sectionNumber = this.getAttribute('data-section');
         // console.log(`Section ${sectionNumber} clicked`);
         // Handle the section click as needed
-        $(`#${currentNoteId}`).text(sectionNumber)
+        $(`#${currentNoteId}`).text(sectionNumber);
+        $('.note').removeClass('note-selected')
+        currentNoteId = null;
     });
 });
 

@@ -5,6 +5,7 @@
     {% load static %}
 
     <link rel="stylesheet" href="{% static 'Core/css/3party/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'Core/css/base.css' %}">
     <link rel="stylesheet" href="{% static 'Core/css/styles.css' %}">
 
     <!-- fonts -->
@@ -51,6 +52,9 @@
 <body style="background-color: #fafafa; font-family: 'Vazirmatn'">
 
 <div class="container-fluid">
+
+    {% include "Core/modules/menu.html" %}
+
     {% block content %}{% endblock content %}
 </div>
 
@@ -70,5 +74,11 @@
 
 {% block script %}
 {% endblock script %}
+
+<script>
+    function playNoteSheet(){
+        playNotes();
+    }
+</script>
 </body>
 </html>

@@ -3,6 +3,8 @@
 
 {% block title %}Hangdrum Player{% endblock %}
 
+
+
 {% block content %}
 
     <!-- body -->
@@ -43,7 +45,7 @@
                 </div>
 
                 <button id="btnAddBar" class="ctn btn-sm btn-success mt-3">Add Bar</button>
-                <button id="btnPlay" class="ctn btn-sm btn-info mt-3">play</button>
+                <button class="ctn btn-sm btn-info mt-3">play</button>
             </div>
 
 
@@ -73,26 +75,26 @@
 
 
     <!-- SHOULD REMOVE -->
-    <div class="container">
-        <h1>Hangdrum Player</h1>
-        <div id="musicSheet">
-            <div class="note-input">
-                <input type="text" class="note" placeholder="Note or Chord (e.g., A C E)">
-                <select class="duration">
-                    <option value="4">Semibreve (4)</option>
-                    <option value="2">Minim (2)</option>
-                    <option value="1">Crotchet (1)</option>
-                    <option value="0.5">Quaver (0.5)</option>
-                    <option value="0.25">Semiquaver (0.25)</option>
-                </select>
-            </div>
-        </div>
-        <button id="addNote">Add Note</button>
+{#    <div class="container">#}
+{#        <h1>Hangdrum Player</h1>#}
+{#        <div id="musicSheet">#}
+{#            <div class="note-input">#}
+{#                <input type="text" class="note" placeholder="Note or Chord (e.g., A C E)">#}
+{#                <select class="duration">#}
+{#                    <option value="4">Semibreve (4)</option>#}
+{#                    <option value="2">Minim (2)</option>#}
+{#                    <option value="1">Crotchet (1)</option>#}
+{#                    <option value="0.5">Quaver (0.5)</option>#}
+{#                    <option value="0.25">Semiquaver (0.25)</option>#}
+{#                </select>#}
+{#            </div>#}
+{#        </div>#}
+{#        <button id="addNote">Add Note</button>#}
         {#        <input type="text" id="noteInput" placeholder="Enter notes (e.g., A,B,C,D)">#}
         {#        <input type="text" id="durationInput" placeholder="Enter durations (e.g., 4,2,1,1)" value="1,1,1,1">#}
-        <input type="number" id="tempoInput" placeholder="Enter tempo (BPM)" value="120">
-        <button id="playButton">Play Notes</button>
-    </div>
+{#        <input type="number" id="tempoInput" placeholder="Enter tempo (BPM)" value="120">#}
+{#        <button >Play Notes</button>#}
+{#    </div>#}
 
     <div id="myModal" class="modal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered modal-lg">
