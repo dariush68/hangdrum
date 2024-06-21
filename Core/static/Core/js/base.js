@@ -119,11 +119,36 @@ function downloadCSVfile(csvData, filename = "data.csv") {
     downloadLink.click();
 }
 
-
-
 function riseToast() {
     var toastElList = [].slice.call(document.querySelectorAll('.toast'))
     var toastList = toastElList.map(function (toastEl) {
         return new bootstrap.Toast(toastEl, option)
     })
+}
+
+function selectFromMenu(selectedItem){
+
+    console.log(selectedItem)
+    $(".include-page").addClass('d-none');
+
+    $("#btnPlay").addClass('d-none');
+    $("#btnPause").addClass('d-none');
+    $("#frame-save").addClass('d-none');
+
+    switch (selectedItem){
+        case "app":
+            $("#page_app").removeClass('d-none');
+            $("#btnPlay").removeClass('d-none');
+            // $("#btnPause").removeClass('d-none');
+            $("#frame-save").removeClass('d-none');
+            break;
+        case "sheet_list":
+            $("#page_sheet_list").removeClass('d-none');
+            break;
+    }
+}
+
+function stringToDate(strDate){
+    let listStr = strDate.split("T")
+    return listStr[0]
 }

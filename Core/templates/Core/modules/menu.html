@@ -1,24 +1,20 @@
 {% load static %}
+
 <ul class="nav-links mt-1 d-flex">
     <a href="#" class="justify-content-center"><img src="{% static 'Core/images/logo-no-background.png' %}"
                                                     alt="rabin" width="70px" class=""></a>
-    <li><a href="#">Dashboard</a></li>
+    <li><a id="nav_menu_app"  href="#" onclick="selectFromMenu('app')">App</a></li>
     <!-- class="center,upward,forward"> -->
-    {#        <li class="center"><a id="nav-menu-wallet" class="rabin-nav-item" href="/">Wallet</a></li>#}
-    {#        <li class="center"><a id="nav-menu-wallet-block" class="rabin-nav-item" href="{% url 'wallet-block' %}">Wallet Block</a></li>#}
-    {#        <li class="center"><a id="nav-menu-order" class="rabin-nav-item" href="{% url 'order' %}">Order</a></li>#}
-    {#        <li class="center"><a id="nav-menu-portfolio" class="rabin-nav-item " href="{% url 'portfoio' %}">Portfolio</a></li>#}
-    {#        <li class="center"><a id="nav-menu-autofund" class="rabin-nav-item " href="{% url 'auto-fund' %}">AutoFund</a></li>#}
-    {#        <li class="center"><a id="nav-menu-services" class="rabin-nav-item " href="{% url 'services' %}">Services</a></li>#}
+    <li class="center"><a id="nav_menu_sheet_list" onclick="selectFromMenu('sheet_list')" class="pan-nav-item" href="#">Sheets</a></li>
 
     <div class="w-100 row">
-        <div class="col-11 d-flex justify-content-center">
-            <a href="#" id="btnPlay" title="play notes"><img
-                    src="{% static 'Core/images/svg/play.svg' %}" alt="" height="43px"></a>
+        <div class="col-10 d-flex justify-content-center">
+            <a href="#" id="btnPlay" title="play notes"><img id="img-play" src="{% static 'Core/images/svg/play.svg' %}" alt="" height="43px"></a>
+            <a href="#" id="btnPause" class="d-none" title="pause notes"><img id="img-play" src="{% static 'Core/images/svg/stop.svg' %}" alt="" height="27px"></a>
         </div>
-        <div class="col-1 d-flex justify-content-end">
-            <a href="#" onclick="logout()"><img src="{% static 'Core/images/svg/logout.svg' %}" height="30px"
-                                                title="logout"></a>
+        <div class="col-2 d-flex justify-content-end">
+            <a id="frame-save" href="#" class="mt-3" ><img src="{% static 'Core/images/svg/save.svg' %}" height="30px" title="save"></a>
+            <a href="#" class="mt-3" onclick="logout()"><img src="{% static 'Core/images/svg/logout.svg' %}" height="30px" title="logout"></a>
         </div>
     </div>
 

@@ -1,5 +1,6 @@
 let currentNoteId = null;
 let currentBur = 1; //-- bar number
+let isPlaying = false
 
 // document.getElementById('addNote').addEventListener('click', addNote);
 // document.getElementById('playButton').addEventListener('click', playNotes);
@@ -287,6 +288,9 @@ function playNoteSequence(notes, durations, tempo) {
 }
 
 function playNoteSequenceJson(notes, tempo) {
+
+    changePlayButton(true);
+
     let index = 0;
     const baseDelay = (60 / tempo) * 1000; // Base delay for a crotchet (quarter note)
 
@@ -299,7 +303,6 @@ function playNoteSequenceJson(notes, tempo) {
             const duration = notes[index].weight;
             const delay = baseDelay * duration; // Adjust delay based on duration
 
-
             chord.forEach(item => {
                 let noteMapping = item.note;
                 if(noteMapping === "N") return;
@@ -310,13 +313,14 @@ function playNoteSequenceJson(notes, tempo) {
                 audio.play();
             });
 
-            // const url = noteList[`${note}`]
-            // const audio = new Audio(`${url}`);
-            // audio.play();
             index++;
             setTimeout(playNextNote, delay); // Set timeout for the next note
             // audio.onended = playNextNote; // Play the next note after the current one ends
         }
+        else{
+            changePlayButton(false);
+        }
+
     }
 
     playNextNote(); // Start the sequence
@@ -333,8 +337,9 @@ Semiquaver (sixteenth note): 0.25
 
 function selectNote(noteId) {
     currentNoteId = noteId;
-    $('.note').removeClass('note-selected')
-    $(`#${currentNoteId}`).addClass('note-selected')
+    $('.note').parent().removeClass('note-selected')
+    // $(`#${currentNoteId}`).addClass('note-selected')
+    $(`#${currentNoteId}`).parent().addClass('note-selected')
         // myModal.show()
 }
 
@@ -344,7 +349,7 @@ document.querySelectorAll('.section').forEach(section => {
         // console.log(`Section ${sectionNumber} clicked`);
         // Handle the section click as needed
         $(`#${currentNoteId}`).text(sectionNumber);
-        $('.note').removeClass('note-selected')
+        $('.note').parent().removeClass('note-selected')
         currentNoteId = null;
     });
 });
@@ -366,7 +371,7 @@ function addBar() {
     // console.log(barId)
 
     $("#note-sheet").append(`
-        <div id="note-bar-${barId}" class="row border mt-1"></div>
+        <div id="note-bar-${barId}" class="row border rounded mt-1"></div>
     `);
 
     for (let i = 1; i <= 16; i++) {
@@ -376,11 +381,9 @@ function addBar() {
 
         $(`#note-bar-${barId}`).append(`
             <div class="col ${isBorder}">
-                <a id="note-bar-${barId}-bit-${i}-1" href="#" onclick="selectNote('note-bar-${barId}-bit-${i}-1')" class="note">-</a>
-                <br>
-                <a id="note-bar-${barId}-bit-${i}-2" href="#" onclick="selectNote('note-bar-${barId}-bit-${i}-2')" class="note">-</a>
-                <br>
-                <a id="note-bar-${barId}-bit-${i}-3" href="#" onclick="selectNote('note-bar-${barId}-bit-${i}-3')" class="note">-</a>
+                <div class="d-flex justify-content-center "><a id="note-bar-${barId}-bit-${i}-1" href="#" onclick="selectNote('note-bar-${barId}-bit-${i}-1')" class="note">-</a></div>
+                <div class="d-flex justify-content-center"><a id="note-bar-${barId}-bit-${i}-2" href="#" onclick="selectNote('note-bar-${barId}-bit-${i}-2')" class="note">-</a></div>
+                <div class="d-flex justify-content-center"><a id="note-bar-${barId}-bit-${i}-3" href="#" onclick="selectNote('note-bar-${barId}-bit-${i}-3')" class="note">-</a></div>
             </div>
         `);
     }
@@ -512,3 +515,15 @@ function getBarBitCord(itemId) {
     return [bar, bit, cord]
 }
 
+function changePlayButton(is_play){
+    isPlaying = is_play
+    console.log(is_play)
+    if(is_play !== true){
+        $("#btnPause").addClass('d-none')
+        $("#btnPlay").removeClass('d-none')
+    }
+    else{
+        $("#btnPause").removeClass('d-none')
+        $("#btnPlay").addClass('d-none')
+    }
+}

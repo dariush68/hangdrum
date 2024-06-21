@@ -1,0 +1,31 @@
+{% load static %}
+
+{#{% block title %}Sheet List{% endblock %}#}
+
+
+
+{% block content %}
+
+    <div class="input-group mb-3 w-25">
+        <span class="input-group-text" id="basic-addon1"><img src="{% static 'Core/images/svg/search.svg' %}" height="20px"></span>
+        <input type="text" class="form-control" placeholder="Search" aria-label="Search"
+               aria-describedby="basic-addon1">
+    </div>
+
+    <div id="div-sheet-list">
+    </div>
+
+
+{% endblock content %}
+
+
+{% block script %}
+    <script>
+        const music_src = "{% static 'Core/images/svg/music-2.svg' %}";
+        const user_src = "{% static 'Core/images/svg/user-1.svg' %}";
+        const date_src = "{% static 'Core/images/svg/date-today.svg' %}";
+        const video_src = "{% static 'Core/images/svg/video-file.svg' %}";
+        const ticket_src = "{% static 'Core/images/svg/ticket-alt.svg' %}";
+    </script>
+    <script src="{% static 'Core/js/sheetList.js' %}"></script>
+{% endblock script %}
