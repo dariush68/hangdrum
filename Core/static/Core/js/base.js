@@ -2,6 +2,7 @@
 const _base_url = "http://127.0.0.1:8000/"
 // const _base_url = "https://site.ir/"
 
+var selectedSheet = null;
 
 
 
@@ -141,6 +142,8 @@ function selectFromMenu(selectedItem){
             $("#btnPlay").removeClass('d-none');
             // $("#btnPause").removeClass('d-none');
             $("#frame-save").removeClass('d-none');
+
+            CheckSelectedSheet();
             break;
         case "sheet_list":
             $("#page_sheet_list").removeClass('d-none');
