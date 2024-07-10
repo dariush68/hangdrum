@@ -5,21 +5,48 @@ let isPlaying = false
 document.getElementById('btnAddBar').addEventListener('click', addBar);
 document.getElementById('btnPlay').addEventListener('click', play);
 
-var myModal = new bootstrap.Modal(document.getElementById('myModal'))
 
-function CheckSelectedSheet(){
-    if(selectedSheet != null){
+var myModal = new bootstrap.Modal(document.getElementById('myModal'))
+var modalSaveSheet = new bootstrap.Modal(document.getElementById('modalSaveSheet'))
+
+//-- check sheet is selected for loading
+function CheckSelectedSheet() {
+    if (selectedSheet != null) {
         console.log("selectedSheet")
         console.log(selectedSheet)
         const sheetJson = JSON.parse(selectedSheet.sheet)
         console.log(sheetJson)
 
-        const maxBarCount = parseInt(sheetJson[sheetJson.length-1].bar);
-        console.log(maxBarCount)
+        const maxBarCount = parseInt(sheetJson[sheetJson.length - 1].bar);
+        //console.log(maxBarCount)
 
         $("#note-sheet").empty();
-        for(let i=1; i<= maxBarCount; i++){
+        currentBur = 1;
+        for (let i = 1; i <= maxBarCount; i++) {
             addBar();
+        }
+
+        //-- set notes
+        for (let i = 0; i <= sheetJson.length; i++) {
+            //console.log(`----${i}------`)
+            //console.log(sheetJson[i])
+            //note-bar-2-bit-1-1
+            if (sheetJson[i].cord[0] !== undefined) {
+                const cord_1 = `note-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-1`;
+                $(`#${cord_1}`).text(sheetJson[i].cord[0].note);
+                //console.log(cord_1)
+            }
+            if (sheetJson[i].cord[1] !== undefined) {
+                const cord_2 = `note-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-2`;
+                $(`#${cord_2}`).text(sheetJson[i].cord[1].note);
+                //console.log(cord_2)
+            }
+            if (sheetJson[i].cord[2] !== undefined) {
+                const cord_3 = `note-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-3`;
+                $(`#${cord_3}`).text(sheetJson[i].cord[2].note);
+                //console.log(cord_3)
+            }
+            // $(`#note-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-${sheetJson[i].cord[0]}`)
         }
     }
 
@@ -30,14 +57,14 @@ function CheckSelectedSheet(){
 /*
 *
 * */
-document.addEventListener('keydown', function(event) {
+document.addEventListener('keydown', function (event) {
 
     console.log(currentNoteId)
-    if(currentNoteId == null) return;
+    if (currentNoteId == null) return;
 
     // console.log(event.keyCode)
 
-    switch (event.keyCode){
+    switch (event.keyCode) {
         //-- "1"
         case 49:
             $(`#${currentNoteId}`).text(1);
@@ -95,16 +122,16 @@ document.addEventListener('keydown', function(event) {
 
 });
 
-function rightIndex(noteId){
-    if(noteId == null) return "";
+function rightIndex(noteId) {
+    if (noteId == null) return "";
     let items = getBarBitCord(noteId)
     let bar = parseInt(items[0])
     let bit = parseInt(items[1])
     let chord = parseInt(items[2])
 
-    if(bit < 16) bit++;
-    else if(bit === 16){
-        if(currentBur > 1){
+    if (bit < 16) bit++;
+    else if (bit === 16) {
+        if (currentBur > 1) {
             bit = 1;
             bar++;
         }
@@ -115,16 +142,16 @@ function rightIndex(noteId){
     return newId;
 }
 
-function leftIndex(noteId){
-    if(noteId == null) return "";
+function leftIndex(noteId) {
+    if (noteId == null) return "";
     let items = getBarBitCord(noteId)
     let bar = parseInt(items[0])
     let bit = parseInt(items[1])
     let chord = parseInt(items[2])
 
-    if(bit > 1) bit--;
-    else if(bit === 1){
-        if(bar > 1){
+    if (bit > 1) bit--;
+    else if (bit === 1) {
+        if (bar > 1) {
             bit = 16;
             bar--;
         }
@@ -135,15 +162,15 @@ function leftIndex(noteId){
     return newId;
 }
 
-function downIndex(noteId){
-    if(noteId == null) return "";
+function downIndex(noteId) {
+    if (noteId == null) return "";
     let items = getBarBitCord(noteId)
     let bar = parseInt(items[0])
     let bit = parseInt(items[1])
     let chord = parseInt(items[2])
 
-    if(chord > 1) chord--;
-    else if(bar > 1){
+    if (chord > 1) chord--;
+    else if (bar > 1) {
         bar--;
         chord = 3;
     }
@@ -153,15 +180,15 @@ function downIndex(noteId){
     return newId;
 }
 
-function upIndex(noteId){
-    if(noteId == null) return "";
+function upIndex(noteId) {
+    if (noteId == null) return "";
     let items = getBarBitCord(noteId)
     let bar = parseInt(items[0])
     let bit = parseInt(items[1])
     let chord = parseInt(items[2])
 
-    if(chord < 3) chord++;
-    else if(bar < currentBur - 1){
+    if (chord < 3) chord++;
+    else if (bar < currentBur - 1) {
         bar++;
         chord = 1;
     }
@@ -190,7 +217,7 @@ function playNoteSequenceJson(notes, tempo) {
 
             chord.forEach(item => {
                 let noteMapping = item.note;
-                if(noteMapping === "N") return;
+                if (noteMapping === "N") return;
                 // console.log("noteMapping:"+noteMapping)
                 const url = noteList[`${noteMapping}`]
                 // console.log(url)
@@ -201,8 +228,7 @@ function playNoteSequenceJson(notes, tempo) {
             index++;
             setTimeout(playNextNote, delay); // Set timeout for the next note
             // audio.onended = playNextNote; // Play the next note after the current one ends
-        }
-        else{
+        } else {
             changePlayButton(false);
         }
 
@@ -225,7 +251,7 @@ function selectNote(noteId) {
     $('.note').parent().removeClass('note-selected')
     // $(`#${currentNoteId}`).addClass('note-selected')
     $(`#${currentNoteId}`).parent().addClass('note-selected')
-        // myModal.show()
+    // myModal.show()
 }
 
 document.querySelectorAll('.section').forEach(section => {
@@ -255,7 +281,7 @@ function addBar() {
 
     const barId = currentBur++;
 
-    // console.log(barId)
+    console.log(`barId=${barId}`)
 
     $("#note-sheet").append(`
         <div id="note-bar-${barId}" class="row border rounded mt-1"></div>
@@ -276,10 +302,8 @@ function addBar() {
     }
 }
 
-//-- play sheet
-function play() {
-    console.log("start play")
-    console.log(currentBur)
+//-- convert sheet to json
+function sheet2json() {
 
     const notes = [];
     const durations = [];
@@ -295,7 +319,7 @@ function play() {
         //-- check quit in first place
         if (val === '-' && j === 1 && cordId === 1) {
             let itms = getBarBitCord(itemId);
-            if(itms[0] === '1') return {
+            if (itms[0] === '1') return {
                 "note": 'N',
                 "bar": itms[0],
                 "bit": itms[1],
@@ -374,9 +398,9 @@ function play() {
                     const prevNote = notes[currentBarIndex - 1];
                     let diffBit = 0;
                     //-- for same bar
-                    if(prevNote.bar === chord1.bar) diffBit = parseInt(chord1.bit) - parseInt(prevNote.bit);
+                    if (prevNote.bar === chord1.bar) diffBit = parseInt(chord1.bit) - parseInt(prevNote.bit);
                     //-- for diff bar
-                    else{
+                    else {
                         let prevDiffToEndBit = 16 - parseInt(prevNote.bit);
                         let diffBar = (parseInt(chord1.bar) - parseInt(prevNote.bar) - 1) * 16;
                         diffBit = parseInt(chord1.bit) + prevDiffToEndBit + diffBar;
@@ -390,6 +414,15 @@ function play() {
         }
     }
 
+    return notes;
+}
+
+//-- play sheet
+function play() {
+    console.log("start play")
+    console.log(currentBur)
+
+    const notes = sheet2json();
     console.log(notes)
     playNoteSequenceJson(notes, 120);
 }
@@ -406,15 +439,41 @@ function getBarBitCord(itemId) {
 }
 
 //-- change play button shape
-function changePlayButton(is_play){
+function changePlayButton(is_play) {
     isPlaying = is_play
     console.log(is_play)
-    if(is_play !== true){
+    if (is_play !== true) {
         $("#btnPause").addClass('d-none')
         $("#btnPlay").removeClass('d-none')
-    }
-    else{
+    } else {
         $("#btnPause").removeClass('d-none')
         $("#btnPlay").addClass('d-none')
     }
+}
+
+function riseSaveSheetModal(){
+
+    modalSaveSheet.show()
+}
+
+
+function saveSheet() {
+
+
+    console.log("save")
+    const sheet = sheet2json();
+    console.log(`sheet:${sheet}`)
+    console.log(sheet)
+    // return
+    const data = {
+        "title": "sample",
+        "author": 1,
+        "last_modified_date": formatDate(Date.now()),
+        "sheet": JSON.stringify(sheet)
+    };
+    console.log(`data:${data}`);
+    postWithToken("api/v1/sheet-list/", data, (data) => {
+        console.log(data)
+
+    });
 }

@@ -5,7 +5,6 @@ const _base_url = "http://127.0.0.1:8000/"
 var selectedSheet = null;
 
 
-
 function getWithToken(endPoint, cb, language = null) {
     /*
        Hitting an API endpoint, By sending access token in header of an API request
@@ -24,6 +23,29 @@ function getWithToken(endPoint, cb, language = null) {
         },
         error: handleAjaxError
     }); // end ajax
+}
+
+function postWithToken(endPoint, content, cb, language = null) {
+    /*
+       Hitting an API endpoint, By sending access token in header of an API request
+   */
+    $.ajax({
+        url: _base_url + endPoint,
+        headers: {
+            'Authorization': `Bearer ${window.localStorage.getItem('accessToken')}`,
+            'Http-Accept-Language': language == null ? 'fa' : language
+        },
+        type: "POST",
+        data: JSON.stringify(content),
+        contentType: "application/json",
+        tokenFlag: true,
+        success: function (data) {
+            // console.log(data);
+            if (cb) return cb(data)
+        },
+        error: handleAjaxError
+    });
+// end ajax
 }
 
 function handleAjaxError(rs, e) {
@@ -127,7 +149,7 @@ function riseToast() {
     })
 }
 
-function selectFromMenu(selectedItem){
+function selectFromMenu(selectedItem) {
 
     console.log(selectedItem)
     $(".include-page").addClass('d-none');
@@ -136,7 +158,7 @@ function selectFromMenu(selectedItem){
     $("#btnPause").addClass('d-none');
     $("#frame-save").addClass('d-none');
 
-    switch (selectedItem){
+    switch (selectedItem) {
         case "app":
             $("#page_app").removeClass('d-none');
             $("#btnPlay").removeClass('d-none');
@@ -151,7 +173,31 @@ function selectFromMenu(selectedItem){
     }
 }
 
-function stringToDate(strDate){
+function stringToDate(strDate) {
     let listStr = strDate.split("T")
     return listStr[0]
+}
+
+function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2)
+        month = '0' + month;
+    if (day.length < 2)
+        day = '0' + day;
+
+    let hour = '' + d.getHours();
+    let minutes = '' + d.getMinutes();
+    let second = '' + d.getSeconds();
+
+    if (hour.length < 2) hour = '0' + hour;
+    if (minutes.length < 2) minutes = '0' + minutes;
+    if (second.length < 2) second = '0' + second;
+
+    return `${year}-${month}-${day}T${hour}:${minutes}:${second}`
+
+    // return [year, month, day].join('-');
 }
