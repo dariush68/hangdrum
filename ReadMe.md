@@ -6,4 +6,5 @@
 - [ ] load sheet
 - [ ] registration
 - [x] login
-- 
+- [ ] seen counter
+- [ ] delete sheet by owner

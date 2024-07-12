@@ -458,22 +458,27 @@ function riseSaveSheetModal(){
 
 
 function saveSheet() {
+riseToast();return
+    const sheetTitle = $("#inputSheetName").val()
+    console.log(`sheetTitle=${sheetTitle}`)
 
+    modalSaveSheet.hide();
 
-    console.log("save")
     const sheet = sheet2json();
     console.log(`sheet:${sheet}`)
     console.log(sheet)
     // return
     const data = {
-        "title": "sample",
+        "title": sheetTitle,
         "author": 1,
         "last_modified_date": formatDate(Date.now()),
         "sheet": JSON.stringify(sheet)
     };
     console.log(`data:${data}`);
+
+
     postWithToken("api/v1/sheet-list/", data, (data) => {
         console.log(data)
-
+        riseToast();
     });
 }
