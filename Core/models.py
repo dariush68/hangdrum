@@ -17,3 +17,8 @@ class MusicSheet(models.Model):
     def __str__(self):
         return self.title
 
+
+class MusicSheetView(models.Model):
+    music_sheet = models.ForeignKey(MusicSheet, related_name='views', on_delete=models.CASCADE)
+    view_count = models.IntegerField(default=0)
+

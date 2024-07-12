@@ -6,17 +6,30 @@
 
 {% block content %}
 
-    <div class="row">
-        <div class="col-md-4 col-sm-12">
+
+    <div class="row align-items-center">
+        <!-- tab -->
+        <div class="col-md-9">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#" onclick="ChangeTab('Global')" role="tab"
+                       aria-controls="home" aria-selected="true">Global</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#" onclick="ChangeTab('MySheet')" role="tab"
+                       aria-controls="profile" aria-selected="false">My Sheet</a>
+                </li>
+            </ul>
+        </div>
+        <!-- search box -->
+        <div class="col-md-3">
             <div class="input-group mb-3">
-            <span class="input-group-text" id="basic-addon1"><img src="{% static 'Core/images/svg/search.svg' %}"
-                                                                  height="20px"></span>
-                <input type="text" class="form-control" placeholder="Search" aria-label="Search"
-                       aria-describedby="basic-addon1">
+                <input  id="inputSheetSearch" type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="basic-addon1">
+            <span class="input-group-text"><img src="{% static 'Core/images/svg/search.svg' %}" height="20px"></span>
             </div>
         </div>
-        <div class="col-md-8 col-sm-12"></div>
     </div>
+
 
     <div id="div-sheet-list">
     </div>

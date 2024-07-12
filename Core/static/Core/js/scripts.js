@@ -59,8 +59,9 @@ function CheckSelectedSheet() {
 * */
 document.addEventListener('keydown', function (event) {
 
-    console.log(currentNoteId)
     if (currentNoteId == null) return;
+
+    console.log(currentNoteId)
 
     // console.log(event.keyCode)
 
@@ -120,7 +121,7 @@ document.addEventListener('keydown', function (event) {
     }
 
 
-});
+}, true);
 
 function rightIndex(noteId) {
     if (noteId == null) return "";
@@ -458,7 +459,7 @@ function riseSaveSheetModal(){
 
 
 function saveSheet() {
-riseToast();return
+
     const sheetTitle = $("#inputSheetName").val()
     console.log(`sheetTitle=${sheetTitle}`)
 

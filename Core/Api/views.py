@@ -2,9 +2,11 @@ from django.db.models import Q
 from django.shortcuts import render
 from rest_framework import viewsets, permissions
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.response import Response
 
 from Core import models
 from Core.Api import serializer
+from Core.models import MusicSheetView
 
 
 class StandardResultsSetPagination(PageNumberPagination):
@@ -19,17 +21,33 @@ def index(request):
 
 class MusicSheetViewset(viewsets.ModelViewSet):
     queryset = models.MusicSheet.objects.all()
-    serializer_class = serializer.MusicSheetSerializer
+    # serializer_class = serializer.MusicSheetSerializer
     pagination_class = StandardResultsSetPagination
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,]
 
     def get_queryset(self):
         qs = super().get_queryset().order_by('-id')
-        # qs = qs.filter(Q(is_show=True))
-
         query = self.request.GET.get("q")
         if query is not None:
-            qs = qs.filter(
-                Q(title__icontains=query)
-            ).distinct()
+            qs = qs.filter(Q(title__icontains=query)).distinct()
+
+        query_user = self.request.GET.get("userSheet")
+        if query_user is not None:
+            qs = qs.filter(Q(author=self.request.user)).distinct()
         return qs
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return serializer.MusicSheetListSerializer
+        return serializer.MusicSheetDetailSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        # Increment the view count
+        music_sheet_view, created = MusicSheetView.objects.get_or_create(music_sheet=instance)
+        music_sheet_view.view_count += 1
+        music_sheet_view.save()
+
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)

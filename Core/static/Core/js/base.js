@@ -204,3 +204,8 @@ function formatDate(date) {
 
     // return [year, month, day].join('-');
 }
+
+function showDate(date){
+    const dateList = date.split('T');
+    return dateList[0]
+}

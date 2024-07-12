@@ -1,10 +1,15 @@
 ###ToDo
+- [x] search on sheet
+- [x] save sheet
+- [x] load sheet
+- [x] login
+- 
+- [ ] my sheet tab
+- 
 - [ ] R/L hand indicator
 - [ ] timeline indicator with play
 - [ ] loop player
-- [ ] save sheet
-- [ ] load sheet
 - [ ] registration
-- [x] login
 - [ ] seen counter
 - [ ] delete sheet by owner
+- [ ] edit sheet by owner
