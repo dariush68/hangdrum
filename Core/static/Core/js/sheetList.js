@@ -17,7 +17,6 @@ $('#inputSheetSearch').on('input', function () {
     }, 400);
 });
 
-
 function GetSheetList() {
 
     let url = "api/v1/sheet-list/?";
@@ -69,6 +68,7 @@ function GetSheetItem(sheetId, cb) {
         cb(data);
     });
 }
+
 
 function SelectSheet(sheetId) {
     console.log("SelectSheet:")
