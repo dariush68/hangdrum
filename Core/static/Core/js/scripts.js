@@ -17,10 +17,13 @@ function CheckSelectedSheet() {
         const sheetJson = JSON.parse(selectedSheet.sheet)
         console.log(sheetJson)
 
+        $('#sheet-info').empty().append(`${selectedSheet.title}`)
+
         const maxBarCount = parseInt(sheetJson[sheetJson.length - 1].bar);
         //console.log(maxBarCount)
 
         $("#note-sheet").empty();
+        //$("#note-sheet-view").empty();
         currentBur = 1;
         for (let i = 1; i <= maxBarCount; i++) {
             addBar();
@@ -273,20 +276,20 @@ initSheet();
 //-- empty sheet
 function initSheet() {
     $("#note-sheet").empty();
+    //$("#note-sheet-view").empty();
     console.log("empty sheet")
     addBar();
 }
 
-//-- ad bar
+//-- add bar
 function addBar() {
 
     const barId = currentBur++;
 
     console.log(`barId=${barId}`)
 
-    $("#note-sheet").append(`
-        <div id="note-bar-${barId}" class="row border rounded mt-1"></div>
-    `);
+    $("#note-sheet").append(`<div id="note-bar-${barId}" class="row border rounded mt-1"></div>`);
+    $("#note-sheet-view").append(`<div id="note-view-bar-${barId}" class="row border rounded mt-1"></div>`);
 
     for (let i = 1; i <= 16; i++) {
         // console.log(i)
