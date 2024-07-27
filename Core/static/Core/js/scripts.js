@@ -1,7 +1,7 @@
 let currentNoteId = null;
 let currentBur = 1; //-- bar number
 let isPlaying = false
-let isViewMode = false
+let isViewMode = true
 
 document.getElementById('btnAddBar').addEventListener('click', addBar);
 document.getElementById('btnPlay').addEventListener('click', play);
@@ -525,10 +525,12 @@ function changeSheetViewMode(){
         isViewMode = false;
         $('#note-sheet-view').addClass('d-none');
         $('#note-sheet').removeClass('d-none');
+        $('#btnAddBar').removeClass('d-none');
     }
     else {
         isViewMode = true;
         $('#note-sheet').addClass('d-none');
         $('#note-sheet-view').removeClass('d-none');
+        $('#btnAddBar').addClass('d-none');
     }
 }
