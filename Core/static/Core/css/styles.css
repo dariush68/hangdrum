@@ -16,6 +16,10 @@
     /*padding: 2px;*/
 }
 
+.current-bar-border{
+    border:1px solid darkorange !important
+}
+
 /*body {*/
 /*    font-family: Arial, sans-serif;*/
 /*    display: flex;*/

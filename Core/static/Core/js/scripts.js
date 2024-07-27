@@ -227,6 +227,13 @@ function playNoteSequenceJson(notes, tempo) {
             const duration = notes[index].weight;
             const delay = baseDelay * duration; // Adjust delay based on duration
 
+            //-- play indicator
+            //"note-bar-${barId}-bit-${i}-1"
+
+            $('.handpan-note-sheet').removeClass('current-bar-border').removeClass('border').addClass('border')
+            $(`#note-view-bar-${notes[index].bar}`).removeClass('border').addClass('current-bar-border');
+            $(`#note-bar-${notes[index].bar}`).removeClass('border').addClass('current-bar-border');
+
             chord.forEach(item => {
                 let noteMapping = item.note;
                 if (noteMapping === "N") return;
@@ -296,8 +303,8 @@ function addBar() {
 
     console.log(`barId=${barId}`)
 
-    $("#note-sheet").append(`<div id="note-bar-${barId}" class="row border rounded mt-1"></div>`);
-    $("#note-sheet-view").append(`<div id="note-view-bar-${barId}" class="row border rounded mt-1"></div>`);
+    $("#note-sheet").append(`<div id="note-bar-${barId}" class="row border rounded mt-1 handpan-note-sheet"></div>`);
+    $("#note-sheet-view").append(`<div id="note-view-bar-${barId}" class="row border rounded mt-1 handpan-note-sheet"></div>`);
 
     for (let i = 1; i <= 16; i++) {
         // console.log(i)
@@ -490,7 +497,7 @@ function saveSheet() {
     // return
     const data = {
         "title": sheetTitle,
-        "author": 1,
+        "author_id": 1,
         "last_modified_date": formatDate(Date.now()),
         "sheet": JSON.stringify(sheet)
     };
