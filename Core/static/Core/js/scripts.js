@@ -234,6 +234,11 @@ function playNoteSequenceJson(notes, tempo) {
             $(`#note-view-bar-${notes[index].bar}`).removeClass('border').addClass('current-bar-border');
             $(`#note-bar-${notes[index].bar}`).removeClass('border').addClass('current-bar-border');
 
+            //-- highligte bar
+            $('.handpan-note-sheet-bar').removeClass('current-bit-body')
+            $(`#note-bar-${notes[index].bar}-bit-${notes[index].bit}-1`).parent().parent().addClass('current-bit-body');
+            $(`#note-view-bar-${notes[index].bar}-bit-${notes[index].bit}-1`).parent().parent().addClass('current-bit-body');
+
             chord.forEach(item => {
                 let noteMapping = item.note;
                 if (noteMapping === "N") return;
@@ -249,6 +254,10 @@ function playNoteSequenceJson(notes, tempo) {
             // audio.onended = playNextNote; // Play the next note after the current one ends
         } else {
             changePlayButton(false);
+
+            //-- reset borders
+            $('.handpan-note-sheet').removeClass('current-bar-border').removeClass('border').addClass('border')
+            $('.handpan-note-sheet-bar').removeClass('current-bit-body')
         }
 
     }
@@ -312,15 +321,15 @@ function addBar() {
         if (i % 4 === 0) isBorder = "border-end";
 
         $(`#note-bar-${barId}`).append(`
-            <div class="col ${isBorder}">
-                <div class="d-flex justify-content-center "><a id="note-bar-${barId}-bit-${i}-1" href="#" onclick="selectNote('note-bar-${barId}-bit-${i}-1')" class="note">-</a></div>
+            <div class="col ${isBorder} p-0 m-0  handpan-note-sheet-bar">
+                <div class="d-flex justify-content-center"><a id="note-bar-${barId}-bit-${i}-1" href="#" onclick="selectNote('note-bar-${barId}-bit-${i}-1')" class="note">-</a></div>
                 <div class="d-flex justify-content-center"><a id="note-bar-${barId}-bit-${i}-2" href="#" onclick="selectNote('note-bar-${barId}-bit-${i}-2')" class="note">-</a></div>
                 <div class="d-flex justify-content-center"><a id="note-bar-${barId}-bit-${i}-3" href="#" onclick="selectNote('note-bar-${barId}-bit-${i}-3')" class="note">-</a></div>
             </div>
         `);
 
         $(`#note-view-bar-${barId}`).append(`
-            <div class="col ${isBorder}">
+            <div class="col ${isBorder} p-0 m-0 handpan-note-sheet-bar">
                 <div class="d-flex justify-content-center "><a id="note-view-bar-${barId}-bit-${i}-1" href="#" class="note"></a></div>
                 <div class="d-flex justify-content-center"><a id="note-view-bar-${barId}-bit-${i}-2" href="#" class="note"></a></div>
                 <div class="d-flex justify-content-center"><a id="note-view-bar-${barId}-bit-${i}-3" href="#" class="note"></a></div>
