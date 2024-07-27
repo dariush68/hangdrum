@@ -1,6 +1,7 @@
 let currentNoteId = null;
 let currentBur = 1; //-- bar number
 let isPlaying = false
+let isViewMode = false
 
 document.getElementById('btnAddBar').addEventListener('click', addBar);
 document.getElementById('btnPlay').addEventListener('click', play);
@@ -23,7 +24,7 @@ function CheckSelectedSheet() {
         //console.log(maxBarCount)
 
         $("#note-sheet").empty();
-        //$("#note-sheet-view").empty();
+        $("#note-sheet-view").empty();
         currentBur = 1;
         for (let i = 1; i <= maxBarCount; i++) {
             addBar();
@@ -38,16 +39,23 @@ function CheckSelectedSheet() {
                 const cord_1 = `note-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-1`;
                 $(`#${cord_1}`).text(sheetJson[i].cord[0].note);
                 //console.log(cord_1)
+
+                const cord_view_1 = `note-view-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-1`;
+                $(`#${cord_view_1}`).text(sheetJson[i].cord[0].note);
             }
             if (sheetJson[i].cord[1] !== undefined) {
                 const cord_2 = `note-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-2`;
                 $(`#${cord_2}`).text(sheetJson[i].cord[1].note);
                 //console.log(cord_2)
+                const cord_view_2 = `note-view-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-2`;
+                $(`#${cord_view_2}`).text(sheetJson[i].cord[1].note);
             }
             if (sheetJson[i].cord[2] !== undefined) {
                 const cord_3 = `note-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-3`;
                 $(`#${cord_3}`).text(sheetJson[i].cord[2].note);
                 //console.log(cord_3)
+                const cord_view_3 = `note-view-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-3`;
+                $(`#${cord_view_3}`).text(sheetJson[i].cord[2].note);
             }
             // $(`#note-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-${sheetJson[i].cord[0]}`)
         }
@@ -276,7 +284,7 @@ initSheet();
 //-- empty sheet
 function initSheet() {
     $("#note-sheet").empty();
-    //$("#note-sheet-view").empty();
+    $("#note-sheet-view").empty();
     console.log("empty sheet")
     addBar();
 }
@@ -301,6 +309,14 @@ function addBar() {
                 <div class="d-flex justify-content-center "><a id="note-bar-${barId}-bit-${i}-1" href="#" onclick="selectNote('note-bar-${barId}-bit-${i}-1')" class="note">-</a></div>
                 <div class="d-flex justify-content-center"><a id="note-bar-${barId}-bit-${i}-2" href="#" onclick="selectNote('note-bar-${barId}-bit-${i}-2')" class="note">-</a></div>
                 <div class="d-flex justify-content-center"><a id="note-bar-${barId}-bit-${i}-3" href="#" onclick="selectNote('note-bar-${barId}-bit-${i}-3')" class="note">-</a></div>
+            </div>
+        `);
+
+        $(`#note-view-bar-${barId}`).append(`
+            <div class="col ${isBorder}">
+                <div class="d-flex justify-content-center "><a id="note-view-bar-${barId}-bit-${i}-1" href="#" class="note"></a></div>
+                <div class="d-flex justify-content-center"><a id="note-view-bar-${barId}-bit-${i}-2" href="#" class="note"></a></div>
+                <div class="d-flex justify-content-center"><a id="note-view-bar-${barId}-bit-${i}-3" href="#" class="note"></a></div>
             </div>
         `);
     }
@@ -485,4 +501,18 @@ function saveSheet() {
         console.log(data)
         riseToast();
     });
+}
+
+function changeSheetViewMode(){
+
+    if(isViewMode){
+        isViewMode = false;
+        $('#note-sheet-view').addClass('d-none');
+        $('#note-sheet').removeClass('d-none');
+    }
+    else {
+        isViewMode = true;
+        $('#note-sheet').addClass('d-none');
+        $('#note-sheet-view').removeClass('d-none');
+    }
 }
