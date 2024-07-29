@@ -2,9 +2,12 @@ let currentNoteId = null;
 let currentBur = 1; //-- bar number
 let isPlaying = false
 let isViewMode = true
+let currentPlayIndex = 0;
+let pauseInterrupt = false;
 
 document.getElementById('btnAddBar').addEventListener('click', addBar);
 document.getElementById('btnPlay').addEventListener('click', play);
+document.getElementById('btnPause').addEventListener('click', pause);
 
 
 var myModal = new bootstrap.Modal(document.getElementById('myModal'))
@@ -215,29 +218,35 @@ function playNoteSequenceJson(notes, tempo) {
 
     changePlayButton(true);
 
-    let index = 0;
     const baseDelay = (60 / tempo) * 1000; // Base delay for a crotchet (quarter note)
 
     function playNextNote() {
-        if (index < notes.length) {
+
+        //-- check pause
+        if(pauseInterrupt){
+            pauseInterrupt = false;
+            return;
+        }
+
+        if (currentPlayIndex < notes.length) {
             // const note = notes[index].trim().toUpperCase();
             // const chord = notes[index].split(' ').map(note => note.trim().toUpperCase());
-            const chord = notes[index].cord;
+            const chord = notes[currentPlayIndex].cord;
 
-            const duration = notes[index].weight;
+            const duration = notes[currentPlayIndex].weight;
             const delay = baseDelay * duration; // Adjust delay based on duration
 
             //-- play indicator
             //"note-bar-${barId}-bit-${i}-1"
 
             $('.handpan-note-sheet').removeClass('current-bar-border').removeClass('border').addClass('border')
-            $(`#note-view-bar-${notes[index].bar}`).removeClass('border').addClass('current-bar-border');
-            $(`#note-bar-${notes[index].bar}`).removeClass('border').addClass('current-bar-border');
+            $(`#note-view-bar-${notes[currentPlayIndex].bar}`).removeClass('border').addClass('current-bar-border');
+            $(`#note-bar-${notes[currentPlayIndex].bar}`).removeClass('border').addClass('current-bar-border');
 
             //-- highligte bar
             $('.handpan-note-sheet-bar').removeClass('current-bit-body')
-            $(`#note-bar-${notes[index].bar}-bit-${notes[index].bit}-1`).parent().parent().addClass('current-bit-body');
-            $(`#note-view-bar-${notes[index].bar}-bit-${notes[index].bit}-1`).parent().parent().addClass('current-bit-body');
+            $(`#note-bar-${notes[currentPlayIndex].bar}-bit-${notes[currentPlayIndex].bit}-1`).parent().parent().addClass('current-bit-body');
+            $(`#note-view-bar-${notes[currentPlayIndex].bar}-bit-${notes[currentPlayIndex].bit}-1`).parent().parent().addClass('current-bit-body');
 
             chord.forEach(item => {
                 let noteMapping = item.note;
@@ -249,11 +258,14 @@ function playNoteSequenceJson(notes, tempo) {
                 audio.play();
             });
 
-            index++;
+            currentPlayIndex++;
             setTimeout(playNextNote, delay); // Set timeout for the next note
             // audio.onended = playNextNote; // Play the next note after the current one ends
-        } else {
+        }
+
+        else {
             changePlayButton(false);
+            currentPlayIndex = 0;
 
             //-- reset borders
             $('.handpan-note-sheet').removeClass('current-bar-border').removeClass('border').addClass('border')
@@ -461,6 +473,14 @@ function play() {
     const notes = sheet2json();
     console.log(notes)
     playNoteSequenceJson(notes, 120);
+}
+
+//-- pause sheet
+function pause() {
+    console.log("start pause")
+    console.log(currentBur)
+    pauseInterrupt = true;
+    changePlayButton(false);
 }
 
 //-- parse bar, bit and code from id

@@ -3,16 +3,19 @@
 - [x] save sheet
 - [x] load sheet
 - [x] login
+- [x] my sheet tab
+- [x] play mode and edit mode  (show only note in play mode)
 - 
-- [ ] my sheet tab
+- [ ] timeline indicator with play (show tone-field in hang-drum)
+- [ ] pause button function
 - 
 - [ ] R/L hand indicator
-- [ ] timeline indicator with play (show tone-field in hang-drum)
 - [ ] loop player
 - [ ] registration
 - [ ] seen counter
 - [ ] delete sheet by owner
 - [ ] edit sheet by owner
-- [ ] play mode and edit mode  (show only note in play mode)
 - [ ] support right number
 - [ ] support clear note with delete key
+- [ ] tempo input
+- [ ] support 6/8
