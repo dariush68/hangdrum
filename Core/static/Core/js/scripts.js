@@ -1,6 +1,7 @@
 let currentNoteId = null;
 let currentBur = 1; //-- bar number
 let isPlaying = false
+let isViewMode = true
 
 document.getElementById('btnAddBar').addEventListener('click', addBar);
 document.getElementById('btnPlay').addEventListener('click', play);
@@ -17,10 +18,13 @@ function CheckSelectedSheet() {
         const sheetJson = JSON.parse(selectedSheet.sheet)
         console.log(sheetJson)
 
+        $('#sheet-info').empty().append(`${selectedSheet.title}`)
+
         const maxBarCount = parseInt(sheetJson[sheetJson.length - 1].bar);
         //console.log(maxBarCount)
 
         $("#note-sheet").empty();
+        $("#note-sheet-view").empty();
         currentBur = 1;
         for (let i = 1; i <= maxBarCount; i++) {
             addBar();
@@ -35,16 +39,23 @@ function CheckSelectedSheet() {
                 const cord_1 = `note-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-1`;
                 $(`#${cord_1}`).text(sheetJson[i].cord[0].note);
                 //console.log(cord_1)
+
+                const cord_view_1 = `note-view-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-1`;
+                $(`#${cord_view_1}`).text(sheetJson[i].cord[0].note);
             }
             if (sheetJson[i].cord[1] !== undefined) {
                 const cord_2 = `note-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-2`;
                 $(`#${cord_2}`).text(sheetJson[i].cord[1].note);
                 //console.log(cord_2)
+                const cord_view_2 = `note-view-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-2`;
+                $(`#${cord_view_2}`).text(sheetJson[i].cord[1].note);
             }
             if (sheetJson[i].cord[2] !== undefined) {
                 const cord_3 = `note-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-3`;
                 $(`#${cord_3}`).text(sheetJson[i].cord[2].note);
                 //console.log(cord_3)
+                const cord_view_3 = `note-view-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-3`;
+                $(`#${cord_view_3}`).text(sheetJson[i].cord[2].note);
             }
             // $(`#note-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-${sheetJson[i].cord[0]}`)
         }
@@ -216,6 +227,18 @@ function playNoteSequenceJson(notes, tempo) {
             const duration = notes[index].weight;
             const delay = baseDelay * duration; // Adjust delay based on duration
 
+            //-- play indicator
+            //"note-bar-${barId}-bit-${i}-1"
+
+            $('.handpan-note-sheet').removeClass('current-bar-border').removeClass('border').addClass('border')
+            $(`#note-view-bar-${notes[index].bar}`).removeClass('border').addClass('current-bar-border');
+            $(`#note-bar-${notes[index].bar}`).removeClass('border').addClass('current-bar-border');
+
+            //-- highligte bar
+            $('.handpan-note-sheet-bar').removeClass('current-bit-body')
+            $(`#note-bar-${notes[index].bar}-bit-${notes[index].bit}-1`).parent().parent().addClass('current-bit-body');
+            $(`#note-view-bar-${notes[index].bar}-bit-${notes[index].bit}-1`).parent().parent().addClass('current-bit-body');
+
             chord.forEach(item => {
                 let noteMapping = item.note;
                 if (noteMapping === "N") return;
@@ -231,6 +254,10 @@ function playNoteSequenceJson(notes, tempo) {
             // audio.onended = playNextNote; // Play the next note after the current one ends
         } else {
             changePlayButton(false);
+
+            //-- reset borders
+            $('.handpan-note-sheet').removeClass('current-bar-border').removeClass('border').addClass('border')
+            $('.handpan-note-sheet-bar').removeClass('current-bit-body')
         }
 
     }
@@ -273,20 +300,20 @@ initSheet();
 //-- empty sheet
 function initSheet() {
     $("#note-sheet").empty();
+    $("#note-sheet-view").empty();
     console.log("empty sheet")
     addBar();
 }
 
-//-- ad bar
+//-- add bar
 function addBar() {
 
     const barId = currentBur++;
 
     console.log(`barId=${barId}`)
 
-    $("#note-sheet").append(`
-        <div id="note-bar-${barId}" class="row border rounded mt-1"></div>
-    `);
+    $("#note-sheet").append(`<div id="note-bar-${barId}" class="row border rounded mt-1 handpan-note-sheet"></div>`);
+    $("#note-sheet-view").append(`<div id="note-view-bar-${barId}" class="row border rounded mt-1 handpan-note-sheet"></div>`);
 
     for (let i = 1; i <= 16; i++) {
         // console.log(i)
@@ -294,10 +321,18 @@ function addBar() {
         if (i % 4 === 0) isBorder = "border-end";
 
         $(`#note-bar-${barId}`).append(`
-            <div class="col ${isBorder}">
-                <div class="d-flex justify-content-center "><a id="note-bar-${barId}-bit-${i}-1" href="#" onclick="selectNote('note-bar-${barId}-bit-${i}-1')" class="note">-</a></div>
+            <div class="col ${isBorder} p-0 m-0  handpan-note-sheet-bar">
+                <div class="d-flex justify-content-center"><a id="note-bar-${barId}-bit-${i}-1" href="#" onclick="selectNote('note-bar-${barId}-bit-${i}-1')" class="note">-</a></div>
                 <div class="d-flex justify-content-center"><a id="note-bar-${barId}-bit-${i}-2" href="#" onclick="selectNote('note-bar-${barId}-bit-${i}-2')" class="note">-</a></div>
                 <div class="d-flex justify-content-center"><a id="note-bar-${barId}-bit-${i}-3" href="#" onclick="selectNote('note-bar-${barId}-bit-${i}-3')" class="note">-</a></div>
+            </div>
+        `);
+
+        $(`#note-view-bar-${barId}`).append(`
+            <div class="col ${isBorder} p-0 m-0 handpan-note-sheet-bar">
+                <div class="d-flex justify-content-center "><a id="note-view-bar-${barId}-bit-${i}-1" href="#" class="note"></a></div>
+                <div class="d-flex justify-content-center"><a id="note-view-bar-${barId}-bit-${i}-2" href="#" class="note"></a></div>
+                <div class="d-flex justify-content-center"><a id="note-view-bar-${barId}-bit-${i}-3" href="#" class="note"></a></div>
             </div>
         `);
     }
@@ -471,7 +506,7 @@ function saveSheet() {
     // return
     const data = {
         "title": sheetTitle,
-        "author": 1,
+        "author_id": 1,
         "last_modified_date": formatDate(Date.now()),
         "sheet": JSON.stringify(sheet)
     };
@@ -482,4 +517,20 @@ function saveSheet() {
         console.log(data)
         riseToast();
     });
+}
+
+function changeSheetViewMode(){
+
+    if(isViewMode){
+        isViewMode = false;
+        $('#note-sheet-view').addClass('d-none');
+        $('#note-sheet').removeClass('d-none');
+        $('#btnAddBar').removeClass('d-none');
+    }
+    else {
+        isViewMode = true;
+        $('#note-sheet').addClass('d-none');
+        $('#note-sheet-view').removeClass('d-none');
+        $('#btnAddBar').addClass('d-none');
+    }
 }

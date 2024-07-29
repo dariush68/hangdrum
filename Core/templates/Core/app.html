@@ -6,7 +6,11 @@
 
         <!-- note sheet -->
         <div class="col-6">
-            <div id="note-sheet">
+            <div class="d-flex justify-content-center">
+                <span id="sheet-info" style="color: dimgrey; font-size: 10px"></span>
+            </div>
+            <div id="note-sheet-view"></div>
+            <div id="note-sheet" class="d-none">
                 <div class="row border">
                     <div class="col">
                         <a id="note-1-1" href="#" onclick="selectNote('note-1-1')" class="note">-</a>
@@ -33,7 +37,7 @@
                 </div>
             </div>
             <div class="d-flex justify-content-end">
-                <img id="btnAddBar" src="{% static 'Core/images/svg/chat-alt-add-1.svg' %}" alt="add bar"
+                <img id="btnAddBar" class="d-none" src="{% static 'Core/images/svg/chat-alt-add-1.svg' %}" alt="add bar"
                      title="Add Bar" height="50px" style="margin-right: -20px">
             </div>
         </div>

@@ -13,6 +13,7 @@
             <a href="#" id="btnPause" class="d-none" title="pause notes"><img id="img-play" src="{% static 'Core/images/svg/stop.svg' %}" alt="" height="27px"></a>
         </div>
         <div class="col-2 d-flex justify-content-end">
+            <a id="frame-edit" href="#" onclick="changeSheetViewMode()" class="mt-3" ><img src="{% static 'Core/images/svg/edit.svg' %}" height="30px" title="save"></a>
             <a id="frame-save" href="#" onclick="riseSaveSheetModal()" class="mt-3" ><img src="{% static 'Core/images/svg/save.svg' %}" height="30px" title="save"></a>
             <a href="#" class="mt-3" onclick="logout()"><img src="{% static 'Core/images/svg/logout.svg' %}" height="30px" title="logout"></a>
         </div>
