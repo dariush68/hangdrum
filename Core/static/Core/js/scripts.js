@@ -4,6 +4,7 @@ let isPlaying = false
 let isViewMode = true
 let currentPlayIndex = 0;
 let pauseInterrupt = false;
+let selectedSheetNotes = null
 
 document.getElementById('btnAddBar').addEventListener('click', addBar);
 document.getElementById('btnPlay').addEventListener('click', play);
@@ -18,6 +19,12 @@ function CheckSelectedSheet() {
     if (selectedSheet != null) {
         console.log("selectedSheet")
         console.log(selectedSheet)
+
+        //-- provide note json data
+        // selectedSheetNotes = sheet2json();
+        // console.log(selectedSheetNotes)
+
+        //-- draw sheet
         const sheetJson = JSON.parse(selectedSheet.sheet)
         console.log(sheetJson)
 
@@ -34,7 +41,7 @@ function CheckSelectedSheet() {
         }
 
         //-- set notes
-        for (let i = 0; i <= sheetJson.length; i++) {
+        for (let i = 0; i < sheetJson.length; i++) {
             //console.log(`----${i}------`)
             //console.log(sheetJson[i])
             //note-bar-2-bit-1-1
@@ -62,6 +69,10 @@ function CheckSelectedSheet() {
             }
             // $(`#note-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-${sheetJson[i].cord[0]}`)
         }
+
+        //-- provide note json data
+        selectedSheetNotes = sheet2json();
+        console.log(selectedSheetNotes)
     }
 
 }
@@ -213,8 +224,22 @@ function upIndex(noteId) {
     return newId;
 }
 
+function colorizeSelectedBarBit(bar, bit){
 
-function playNoteSequenceJson(notes, tempo) {
+    //-- play indicator
+    $('.handpan-note-sheet').removeClass('current-bar-border').removeClass('border').addClass('border')
+    $(`#note-view-bar-${bar}`).removeClass('border').addClass('current-bar-border');
+    $(`#note-bar-${bar}`).removeClass('border').addClass('current-bar-border');
+
+    //-- highligte bar
+    $('.handpan-note-sheet-bar').removeClass('current-bit-body')
+    $(`#note-bar-${bar}-bit-${bit}-1`).parent().parent().addClass('current-bit-body');
+    $(`#note-view-bar-${bar}-bit-${bit}-1`).parent().parent().addClass('current-bit-body');
+}
+
+function playNoteSequenceJson(tempo) {
+
+    const notes = selectedSheetNotes;
 
     changePlayButton(true);
 
@@ -229,6 +254,7 @@ function playNoteSequenceJson(notes, tempo) {
         }
 
         if (currentPlayIndex < notes.length) {
+
             // const note = notes[index].trim().toUpperCase();
             // const chord = notes[index].split(' ').map(note => note.trim().toUpperCase());
             const chord = notes[currentPlayIndex].cord;
@@ -237,16 +263,7 @@ function playNoteSequenceJson(notes, tempo) {
             const delay = baseDelay * duration; // Adjust delay based on duration
 
             //-- play indicator
-            //"note-bar-${barId}-bit-${i}-1"
-
-            $('.handpan-note-sheet').removeClass('current-bar-border').removeClass('border').addClass('border')
-            $(`#note-view-bar-${notes[currentPlayIndex].bar}`).removeClass('border').addClass('current-bar-border');
-            $(`#note-bar-${notes[currentPlayIndex].bar}`).removeClass('border').addClass('current-bar-border');
-
-            //-- highligte bar
-            $('.handpan-note-sheet-bar').removeClass('current-bit-body')
-            $(`#note-bar-${notes[currentPlayIndex].bar}-bit-${notes[currentPlayIndex].bit}-1`).parent().parent().addClass('current-bit-body');
-            $(`#note-view-bar-${notes[currentPlayIndex].bar}-bit-${notes[currentPlayIndex].bit}-1`).parent().parent().addClass('current-bit-body');
+            colorizeSelectedBarBit(notes[currentPlayIndex].bar, notes[currentPlayIndex].bit);
 
             chord.forEach(item => {
                 let noteMapping = item.note;
@@ -292,6 +309,17 @@ function selectNote(noteId) {
     // $(`#${currentNoteId}`).addClass('note-selected')
     $(`#${currentNoteId}`).parent().addClass('note-selected')
     // myModal.show()
+}
+
+function selectPlayIndicatorPlace(bar, bit) {
+
+    for(let i=0; i<selectedSheetNotes.length; i++ ){
+        if(selectedSheetNotes[i]['bar'] === bar.toString() && selectedSheetNotes[i]['bit'] === bit.toString()){
+            currentPlayIndex = i;
+            colorizeSelectedBarBit(bar, bit);
+            break;
+        }
+    }
 }
 
 document.querySelectorAll('.section').forEach(section => {
@@ -342,9 +370,9 @@ function addBar() {
 
         $(`#note-view-bar-${barId}`).append(`
             <div class="col ${isBorder} p-0 m-0 handpan-note-sheet-bar">
-                <div class="d-flex justify-content-center "><a id="note-view-bar-${barId}-bit-${i}-1" href="#" class="note"></a></div>
-                <div class="d-flex justify-content-center"><a id="note-view-bar-${barId}-bit-${i}-2" href="#" class="note"></a></div>
-                <div class="d-flex justify-content-center"><a id="note-view-bar-${barId}-bit-${i}-3" href="#" class="note"></a></div>
+                <div class="d-flex justify-content-center "><a id="note-view-bar-${barId}-bit-${i}-1" href="#" class="note" onclick="selectPlayIndicatorPlace(${barId}, ${i})"></a></div>
+                <div class="d-flex justify-content-center"><a id="note-view-bar-${barId}-bit-${i}-2" href="#" class="note" onclick="selectPlayIndicatorPlace(${barId}, ${i})"></a></div>
+                <div class="d-flex justify-content-center"><a id="note-view-bar-${barId}-bit-${i}-3" href="#" class="note" onclick="selectPlayIndicatorPlace(${barId}, ${i})"></a></div>
             </div>
         `);
     }
@@ -470,9 +498,7 @@ function play() {
     console.log("start play")
     console.log(currentBur)
 
-    const notes = sheet2json();
-    console.log(notes)
-    playNoteSequenceJson(notes, 120);
+    playNoteSequenceJson( 120);
 }
 
 //-- pause sheet
