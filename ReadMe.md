@@ -5,9 +5,9 @@
 - [x] login
 - [x] my sheet tab
 - [x] play mode and edit mode  (show only note in play mode)
+- [x] pause button function
 - 
 - [ ] timeline indicator with play (show tone-field in hang-drum)
-- [ ] pause button function
 - 
 - [ ] R/L hand indicator
 - [ ] loop player
