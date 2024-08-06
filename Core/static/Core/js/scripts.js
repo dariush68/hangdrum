@@ -5,6 +5,7 @@ let isViewMode = true
 let currentPlayIndex = 0;
 let pauseInterrupt = false;
 let selectedSheetNotes = null
+let isLoopActive = false
 
 document.getElementById('btnAddBar').addEventListener('click', addBar);
 document.getElementById('btnPlay').addEventListener('click', play);
@@ -341,7 +342,7 @@ initSheet();
 function initSheet() {
     $("#note-sheet").empty();
     $("#note-sheet-view").empty();
-    console.log("empty sheet")
+    //console.log("empty sheet")
     addBar();
 }
 
@@ -350,7 +351,7 @@ function addBar() {
 
     const barId = currentBur++;
 
-    console.log(`barId=${barId}`)
+    //console.log(`barId=${barId}`)
 
     $("#note-sheet").append(`<div id="note-bar-${barId}" class="row border rounded mt-1 handpan-note-sheet"></div>`);
     $("#note-sheet-view").append(`<div id="note-view-bar-${barId}" class="row border rounded mt-1 handpan-note-sheet"></div>`);
@@ -578,5 +579,16 @@ function changeSheetViewMode(){
         $('#note-sheet').addClass('d-none');
         $('#note-sheet-view').removeClass('d-none');
         $('#btnAddBar').addClass('d-none');
+    }
+}
+
+function changeLoopMode(){
+
+    if(isLoopActive){
+        isLoopActive = false;
+        $("#hfhfhfhg").css({"color":""})
+    }
+    else{
+        isLoopActive = true;
     }
 }

@@ -32,7 +32,7 @@ function GetSheetList() {
         $('#div-sheet-list').empty();
 
         for (let i = 0; i < data.count; i++) {
-            console.log(data.results[i].author)
+            //console.log(data.results[i].author)
             $('#div-sheet-list').append(`
                 <div class="card mt-2">
                     <div class="card-body">

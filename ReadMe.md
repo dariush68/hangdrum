@@ -19,3 +19,4 @@
 - [ ] support clear note with delete key
 - [ ] tempo input
 - [ ] support 6/8
+- [ ] login-less usage
