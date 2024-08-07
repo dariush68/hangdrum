@@ -22,8 +22,8 @@ var modalSaveSheet = new bootstrap.Modal(document.getElementById('modalSaveSheet
 //-- check sheet is selected for loading
 function CheckSelectedSheet() {
     if (selectedSheet != null) {
-        console.log("selectedSheet")
-        console.log(selectedSheet)
+        // console.log("selectedSheet")
+        // console.log(selectedSheet)
 
         //-- provide note json data
         // selectedSheetNotes = sheet2json();
@@ -31,7 +31,7 @@ function CheckSelectedSheet() {
 
         //-- draw sheet
         const sheetJson = JSON.parse(selectedSheet.sheet)
-        console.log(sheetJson)
+        // console.log(sheetJson)
 
         $('#sheet-info').empty().append(`${selectedSheet.title}`)
 
@@ -77,7 +77,7 @@ function CheckSelectedSheet() {
 
         //-- provide note json data
         selectedSheetNotes = sheet2json();
-        console.log(selectedSheetNotes)
+        // console.log(selectedSheetNotes)
 
         //-- add logic for loop managing
         manageLoopHandler();
@@ -94,7 +94,7 @@ document.addEventListener('keydown', function (event) {
 
     if (currentNoteId == null) return;
 
-    console.log(currentNoteId)
+    // console.log(currentNoteId)
 
     // console.log(event.keyCode)
 
@@ -263,8 +263,6 @@ function playNoteSequenceJson(tempo) {
 
         if (isLoopActive) {
 
-
-
             let bar = Number(notes[currentPlayIndex].bar) - 1
             let bit = Number(notes[currentPlayIndex].bit) - 1
             let currentDivIndex = (bar * 16) + bit;
@@ -356,8 +354,7 @@ function selectPlayIndicatorPlace(bar, bit) {
     //-- in edit mode div applied after view mode, so sub 15
     // if(isViewMode === false) bar = bar - 14;
 
-    console.log(`bar:${bar}, bit:${bit}`)
-    console.log(selectedSheetNotes.length)
+    // console.log(selectedSheetNotes.length)
     for (let i = 0; i < selectedSheetNotes.length; i++) {
         // console.log(`i:${i}, bar:${selectedSheetNotes[i]['bar']}, bit:${selectedSheetNotes[i]['bit']}`)
         if (selectedSheetNotes[i]['bar'] === bar.toString() && selectedSheetNotes[i]['bit'] === bit.toString()) {
@@ -542,8 +539,8 @@ function sheet2json() {
 
 //-- play sheet
 function play() {
-    console.log("start play")
-    console.log(currentBur)
+    // console.log("start play")
+    // console.log(currentBur)
 
     if (isLoopActive) {
 
@@ -554,8 +551,8 @@ function play() {
 
 //-- pause sheet
 function pause() {
-    console.log("start pause")
-    console.log(currentBur)
+    // console.log("start pause")
+    // console.log(currentBur)
     pauseInterrupt = true;
     changePlayButton(false);
 }
@@ -574,7 +571,7 @@ function getBarBitCord(itemId) {
 //-- change play button shape
 function changePlayButton(is_play) {
     isPlaying = is_play
-    console.log(is_play)
+    // console.log(is_play)
     if (is_play !== true) {
         $("#btnPause").addClass('d-none')
         $("#btnPlay").removeClass('d-none')
@@ -593,13 +590,13 @@ function riseSaveSheetModal() {
 function saveSheet() {
 
     const sheetTitle = $("#inputSheetName").val()
-    console.log(`sheetTitle=${sheetTitle}`)
+    // console.log(`sheetTitle=${sheetTitle}`)
 
     modalSaveSheet.hide();
 
     const sheet = sheet2json();
-    console.log(`sheet:${sheet}`)
-    console.log(sheet)
+    // console.log(`sheet:${sheet}`)
+    // console.log(sheet)
     // return
     const data = {
         "title": sheetTitle,
@@ -607,11 +604,11 @@ function saveSheet() {
         "last_modified_date": formatDate(Date.now()),
         "sheet": JSON.stringify(sheet)
     };
-    console.log(`data:${data}`);
+    // console.log(`data:${data}`);
 
 
     postWithToken("api/v1/sheet-list/", data, (data) => {
-        console.log(data)
+        // console.log(data)
         riseToast();
     });
 }
@@ -635,14 +632,21 @@ function changeLoopMode() {
 
     if (isLoopActive === true) {
         isLoopActive = false;
-        console.log(isLoopActive)
+        // console.log(isLoopActive)
         $("#hfhfhfhg").removeClass('handpan-nav-active')
         $("#loopIconSecondary").removeClass('handpan-nav-active')
+
+        // if(isLoopActive)
+        startCell.classList.remove('loop-active');
+        endCell.classList.remove('loop-active');
     } else {
         isLoopActive = true;
-        console.log(isLoopActive)
+        // console.log(isLoopActive)
         $("#hfhfhfhg").addClass('handpan-nav-active')
         $("#loopIconSecondary").addClass('handpan-nav-active')
+
+        startCell.classList.add('loop-active');
+        endCell.classList.add('loop-active');
     }
 }
 

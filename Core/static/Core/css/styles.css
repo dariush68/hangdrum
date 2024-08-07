@@ -1,4 +1,9 @@
 
+:root {
+  --svgcolor: darkGrey;
+  --loopIndicatorcolor: #0a53be40;
+}
+
 .note{
     text-decoration: none;
     color: darkgrey;
@@ -21,9 +26,9 @@
     border-top-width: 2px;
     border-bottom-style: solid;
     border-bottom-width: 2px;
-    border-left-color: #0a53bea0;
-    border-top-color: #0a53bea0;
-    border-bottom-color: #0a53bea0;
+    border-left-color: var(--loopIndicatorcolor);
+    border-top-color: var(--loopIndicatorcolor);
+    border-bottom-color: var(--loopIndicatorcolor);
     border-top-left-radius: 3px;
     border-bottom-left-radius: 3px;
 }
@@ -34,11 +39,17 @@
     border-bottom-width: 2px;
     border-top-style: solid;
     border-top-width: 2px;
-    border-right-color: #0a53bea0 !important;
-    border-bottom-color: #0a53bea0;
-    border-top-color: #0a53bea0;
+    border-right-color: var(--loopIndicatorcolor) !important;
+    border-bottom-color: var(--loopIndicatorcolor);
+    border-top-color: var(--loopIndicatorcolor);
     border-bottom-right-radius: 3px;
     border-top-right-radius: 3px;
+}
+
+.loop-active {
+    fill: orangered;
+    --svgcolor:orangered;
+    --loopIndicatorcolor: #0a53bea0;
 }
 
 
@@ -65,14 +76,10 @@
 }
 
 .handpan-nav-active {
-  fill: orangered;
-  --svgcolor:orangered;
+    fill: orangered;
+    --svgcolor:orangered;
 }
 
-:root {
-  --svgcolor: darkGrey;
-    /*fill: #2CA9BC;*/
-}
 
 
 /*body {*/

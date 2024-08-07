@@ -150,6 +150,10 @@ function selectRangeDone(start, end) {
         loopEndIndex = endIndex
         cells[startIndex].classList.add('loop-start-indicator');
         cells[endIndex].classList.add('loop-end-indicator');
+        if(isLoopActive) {
+            cells[startIndex].classList.add('loop-active');
+            cells[endIndex].classList.add('loop-active');
+        }
     }
 }
 
@@ -180,8 +184,14 @@ function selectViewRangeDone(start, end) {
     else {
         loopStartIndex = startIndex
         loopEndIndex = endIndex
+
         cells[startIndex].classList.add('loop-start-indicator');
         cells[endIndex].classList.add('loop-end-indicator');
+        if(isLoopActive) {
+            cells[startIndex].classList.add('loop-active');
+            cells[endIndex].classList.add('loop-active');
+        }
+
     }
 }
 
