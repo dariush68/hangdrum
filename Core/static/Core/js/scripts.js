@@ -6,6 +6,7 @@ let currentPlayIndex = 0;
 let pauseInterrupt = false;
 let selectedSheetNotes = null
 let isLoopActive = false
+let isRepeatOne = true
 
 let loopStartIndex = null
 let loopEndIndex = null
@@ -244,19 +245,6 @@ function colorizeSelectedBarBit(bar, bit) {
     $(`#note-view-bar-${bar}-bit-${bit}-1`).parent().parent().addClass('current-bit-body');
 }
 
-function colorizeLoopIndicator(bar, bit) {
-
-    //-- play indicator
-    // $('.handpan-note-sheet').removeClass('current-bar-border').removeClass('border').addClass('border')
-    // $(`#note-view-bar-${bar}`).removeClass('border').addClass('current-bar-border');
-    // $(`#note-bar-${bar}`).removeClass('border').addClass('current-bar-border');
-
-    //-- highligte bar
-    $('.handpan-note-sheet-bar').removeClass('loop-selected')
-    $(`#note-bar-${bar}-bit-${bit}-1`).parent().parent().addClass('loop-selected');
-    $(`#note-view-bar-${bar}-bit-${bit}-1`).parent().parent().addClass('loop-selected');
-}
-
 function playNoteSequenceJson(tempo) {
 
     const notes = selectedSheetNotes;
@@ -274,9 +262,15 @@ function playNoteSequenceJson(tempo) {
         }
 
         if (isLoopActive) {
+
+
+
             let bar = Number(notes[currentPlayIndex].bar) - 1
             let bit = Number(notes[currentPlayIndex].bit) - 1
             let currentDivIndex = (bar * 16) + bit;
+
+            // console.log(`loopStartIndex:${loopStartIndex}, loopEndIndex:${loopEndIndex} --> currentDivIndex:${currentDivIndex}`)
+            // console.log(`bar:${bar}, bit:${bit}`)
 
             //-- manage loop play
             while (currentDivIndex < loopStartIndex) {
@@ -286,7 +280,7 @@ function playNoteSequenceJson(tempo) {
                 currentDivIndex = (bar * 16) + bit;
             }
 
-            while(currentDivIndex > loopEndIndex && currentPlayIndex < notes.length){
+            while (currentDivIndex > loopEndIndex && currentPlayIndex < notes.length) {
                 currentPlayIndex = notes.length;
             }
         }
@@ -317,12 +311,22 @@ function playNoteSequenceJson(tempo) {
             setTimeout(playNextNote, delay); // Set timeout for the next note
             // audio.onended = playNextNote; // Play the next note after the current one ends
         } else {
-            changePlayButton(false);
-            currentPlayIndex = 0;
 
-            //-- reset borders
-            $('.handpan-note-sheet').removeClass('current-bar-border').removeClass('border').addClass('border')
-            $('.handpan-note-sheet-bar').removeClass('current-bit-body')
+            //-- check repeat
+            if(isRepeatOne === false){
+
+                currentPlayIndex = 0;
+                setTimeout(playNextNote, 0);
+            }
+            else {
+
+                changePlayButton(false);
+                currentPlayIndex = 0;
+
+                //-- reset borders
+                $('.handpan-note-sheet').removeClass('current-bar-border').removeClass('border').addClass('border')
+                $('.handpan-note-sheet-bar').removeClass('current-bit-body')
+            }
         }
 
     }
@@ -349,7 +353,13 @@ function selectNote(noteId) {
 
 function selectPlayIndicatorPlace(bar, bit) {
 
+    //-- in edit mode div applied after view mode, so sub 15
+    // if(isViewMode === false) bar = bar - 14;
+
+    console.log(`bar:${bar}, bit:${bit}`)
+    console.log(selectedSheetNotes.length)
     for (let i = 0; i < selectedSheetNotes.length; i++) {
+        // console.log(`i:${i}, bar:${selectedSheetNotes[i]['bar']}, bit:${selectedSheetNotes[i]['bit']}`)
         if (selectedSheetNotes[i]['bar'] === bar.toString() && selectedSheetNotes[i]['bit'] === bit.toString()) {
             currentPlayIndex = i;
             // if(isLoopActive) colorizeLoopIndicator(bar, bit);
@@ -398,7 +408,7 @@ function addBar() {
         if (i % 4 === 0) isBorder = "border-end";
 
         $(`#note-bar-${barId}`).append(`
-            <div class="col ${isBorder} p-0 m-0  handpan-note-sheet-bar">
+            <div class="col ${isBorder} p-0 m-0  handpan-note-sheet-bar note-div">
                 <div class="d-flex justify-content-center"><a id="note-bar-${barId}-bit-${i}-1" href="#" onclick="selectNote('note-bar-${barId}-bit-${i}-1')" class="note">-</a></div>
                 <div class="d-flex justify-content-center"><a id="note-bar-${barId}-bit-${i}-2" href="#" onclick="selectNote('note-bar-${barId}-bit-${i}-2')" class="note">-</a></div>
                 <div class="d-flex justify-content-center"><a id="note-bar-${barId}-bit-${i}-3" href="#" onclick="selectNote('note-bar-${barId}-bit-${i}-3')" class="note">-</a></div>
@@ -406,7 +416,7 @@ function addBar() {
         `);
 
         $(`#note-view-bar-${barId}`).append(`
-            <div class="col ${isBorder} p-0 m-0 handpan-note-sheet-bar note-div ">
+            <div class="col ${isBorder} p-0 m-0 handpan-note-sheet-bar note-view-div">
                 <div class="d-flex justify-content-center"><a id="note-view-bar-${barId}-bit-${i}-1" href="#" class="note" onclick="selectPlayIndicatorPlace(${barId}, ${i})"></a></div>
                 <div class="d-flex justify-content-center"><a id="note-view-bar-${barId}-bit-${i}-2" href="#" class="note" onclick="selectPlayIndicatorPlace(${barId}, ${i})"></a></div>
                 <div class="d-flex justify-content-center"><a id="note-view-bar-${barId}-bit-${i}-3" href="#" class="note" onclick="selectPlayIndicatorPlace(${barId}, ${i})"></a></div>
@@ -627,10 +637,27 @@ function changeLoopMode() {
         isLoopActive = false;
         console.log(isLoopActive)
         $("#hfhfhfhg").removeClass('handpan-nav-active')
+        $("#loopIconSecondary").removeClass('handpan-nav-active')
     } else {
         isLoopActive = true;
         console.log(isLoopActive)
         $("#hfhfhfhg").addClass('handpan-nav-active')
+        $("#loopIconSecondary").addClass('handpan-nav-active')
+    }
+}
+
+function changeRepeatMode() {
+
+    let url = $('#img-repeate').attr('src');
+
+    if (isRepeatOne === true) {
+        isRepeatOne = false;
+        url = url.replace('repeat-one', 'repeat')
+        $("#img-repeate").attr("src", url);
+    } else {
+        isRepeatOne = true;
+        url = url.replace('repeat', 'repeat-one')
+        $("#img-repeate").attr("src", url);
     }
 }
 

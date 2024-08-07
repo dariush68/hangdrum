@@ -20,3 +20,4 @@
 - [ ] tempo input
 - [ ] support 6/8
 - [ ] login-less usage
+- [ ] support unde/redo
