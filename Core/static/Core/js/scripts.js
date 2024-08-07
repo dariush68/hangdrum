@@ -322,6 +322,7 @@ function selectPlayIndicatorPlace(bar, bit) {
     }
 }
 
+//-- select note via hang-drum
 document.querySelectorAll('.section').forEach(section => {
     section.addEventListener('click', function (event) {
         const sectionNumber = this.getAttribute('data-section');
@@ -332,6 +333,12 @@ document.querySelectorAll('.section').forEach(section => {
         currentNoteId = null;
     });
 });
+
+function selectNoteViaHangdrum(note){
+    $(`#${currentNoteId}`).text(note);
+    $('.note').parent().removeClass('note-selected')
+    currentNoteId = null;
+}
 
 // console.log(getBarBitCord('note-bar-1-bit-8-1'))
 

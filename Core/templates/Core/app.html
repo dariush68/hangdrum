@@ -45,7 +45,9 @@
 
         <!-- hang-drum -->
         <div class="col-6">
-            <div class="d-flex justify-content-center">
+            {% include 'Core/modules/hangdrum.html' %}
+
+            <div class="d-flex justify-content-center d-none">
                 <div style="width: 600px">
                     <div class="hangdrum-container">
                         <img id="img_hang_drum" src="{% static 'Core/images/hangdrum-instrument-1.jpg' %}"
