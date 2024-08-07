@@ -7,6 +7,9 @@ let pauseInterrupt = false;
 let selectedSheetNotes = null
 let isLoopActive = false
 
+let loopStartIndex = null
+let loopEndIndex = null
+
 document.getElementById('btnAddBar').addEventListener('click', addBar);
 document.getElementById('btnPlay').addEventListener('click', play);
 document.getElementById('btnPause').addEventListener('click', pause);
@@ -74,6 +77,9 @@ function CheckSelectedSheet() {
         //-- provide note json data
         selectedSheetNotes = sheet2json();
         console.log(selectedSheetNotes)
+
+        //-- add logic for loop managing
+        manageLoopHandler();
     }
 
 }
@@ -225,7 +231,7 @@ function upIndex(noteId) {
     return newId;
 }
 
-function colorizeSelectedBarBit(bar, bit){
+function colorizeSelectedBarBit(bar, bit) {
 
     //-- play indicator
     $('.handpan-note-sheet').removeClass('current-bar-border').removeClass('border').addClass('border')
@@ -236,6 +242,19 @@ function colorizeSelectedBarBit(bar, bit){
     $('.handpan-note-sheet-bar').removeClass('current-bit-body')
     $(`#note-bar-${bar}-bit-${bit}-1`).parent().parent().addClass('current-bit-body');
     $(`#note-view-bar-${bar}-bit-${bit}-1`).parent().parent().addClass('current-bit-body');
+}
+
+function colorizeLoopIndicator(bar, bit) {
+
+    //-- play indicator
+    // $('.handpan-note-sheet').removeClass('current-bar-border').removeClass('border').addClass('border')
+    // $(`#note-view-bar-${bar}`).removeClass('border').addClass('current-bar-border');
+    // $(`#note-bar-${bar}`).removeClass('border').addClass('current-bar-border');
+
+    //-- highligte bar
+    $('.handpan-note-sheet-bar').removeClass('loop-selected')
+    $(`#note-bar-${bar}-bit-${bit}-1`).parent().parent().addClass('loop-selected');
+    $(`#note-view-bar-${bar}-bit-${bit}-1`).parent().parent().addClass('loop-selected');
 }
 
 function playNoteSequenceJson(tempo) {
@@ -249,9 +268,27 @@ function playNoteSequenceJson(tempo) {
     function playNextNote() {
 
         //-- check pause
-        if(pauseInterrupt){
+        if (pauseInterrupt) {
             pauseInterrupt = false;
             return;
+        }
+
+        if (isLoopActive) {
+            let bar = Number(notes[currentPlayIndex].bar) - 1
+            let bit = Number(notes[currentPlayIndex].bit) - 1
+            let currentDivIndex = (bar * 16) + bit;
+
+            //-- manage loop play
+            while (currentDivIndex < loopStartIndex) {
+                currentPlayIndex++;
+                bar = Number(notes[currentPlayIndex].bar) - 1
+                bit = Number(notes[currentPlayIndex].bit) - 1
+                currentDivIndex = (bar * 16) + bit;
+            }
+
+            while(currentDivIndex > loopEndIndex && currentPlayIndex < notes.length){
+                currentPlayIndex = notes.length;
+            }
         }
 
         if (currentPlayIndex < notes.length) {
@@ -279,9 +316,7 @@ function playNoteSequenceJson(tempo) {
             currentPlayIndex++;
             setTimeout(playNextNote, delay); // Set timeout for the next note
             // audio.onended = playNextNote; // Play the next note after the current one ends
-        }
-
-        else {
+        } else {
             changePlayButton(false);
             currentPlayIndex = 0;
 
@@ -314,9 +349,10 @@ function selectNote(noteId) {
 
 function selectPlayIndicatorPlace(bar, bit) {
 
-    for(let i=0; i<selectedSheetNotes.length; i++ ){
-        if(selectedSheetNotes[i]['bar'] === bar.toString() && selectedSheetNotes[i]['bit'] === bit.toString()){
+    for (let i = 0; i < selectedSheetNotes.length; i++) {
+        if (selectedSheetNotes[i]['bar'] === bar.toString() && selectedSheetNotes[i]['bit'] === bit.toString()) {
             currentPlayIndex = i;
+            // if(isLoopActive) colorizeLoopIndicator(bar, bit);
             colorizeSelectedBarBit(bar, bit);
             break;
         }
@@ -370,8 +406,8 @@ function addBar() {
         `);
 
         $(`#note-view-bar-${barId}`).append(`
-            <div class="col ${isBorder} p-0 m-0 handpan-note-sheet-bar">
-                <div class="d-flex justify-content-center "><a id="note-view-bar-${barId}-bit-${i}-1" href="#" class="note" onclick="selectPlayIndicatorPlace(${barId}, ${i})"></a></div>
+            <div class="col ${isBorder} p-0 m-0 handpan-note-sheet-bar note-div ">
+                <div class="d-flex justify-content-center"><a id="note-view-bar-${barId}-bit-${i}-1" href="#" class="note" onclick="selectPlayIndicatorPlace(${barId}, ${i})"></a></div>
                 <div class="d-flex justify-content-center"><a id="note-view-bar-${barId}-bit-${i}-2" href="#" class="note" onclick="selectPlayIndicatorPlace(${barId}, ${i})"></a></div>
                 <div class="d-flex justify-content-center"><a id="note-view-bar-${barId}-bit-${i}-3" href="#" class="note" onclick="selectPlayIndicatorPlace(${barId}, ${i})"></a></div>
             </div>
@@ -499,7 +535,11 @@ function play() {
     console.log("start play")
     console.log(currentBur)
 
-    playNoteSequenceJson( 120);
+    if (isLoopActive) {
+
+    }
+
+    playNoteSequenceJson(120);
 }
 
 //-- pause sheet
@@ -534,7 +574,7 @@ function changePlayButton(is_play) {
     }
 }
 
-function riseSaveSheetModal(){
+function riseSaveSheetModal() {
 
     modalSaveSheet.show()
 }
@@ -566,15 +606,14 @@ function saveSheet() {
     });
 }
 
-function changeSheetViewMode(){
+function changeSheetViewMode() {
 
-    if(isViewMode){
+    if (isViewMode) {
         isViewMode = false;
         $('#note-sheet-view').addClass('d-none');
         $('#note-sheet').removeClass('d-none');
         $('#btnAddBar').removeClass('d-none');
-    }
-    else {
+    } else {
         isViewMode = true;
         $('#note-sheet').addClass('d-none');
         $('#note-sheet-view').removeClass('d-none');
@@ -582,13 +621,16 @@ function changeSheetViewMode(){
     }
 }
 
-function changeLoopMode(){
+function changeLoopMode() {
 
-    if(isLoopActive){
+    if (isLoopActive === true) {
         isLoopActive = false;
-        $("#hfhfhfhg").css({"color":""})
-    }
-    else{
+        console.log(isLoopActive)
+        $("#hfhfhfhg").removeClass('handpan-nav-active')
+    } else {
         isLoopActive = true;
+        console.log(isLoopActive)
+        $("#hfhfhfhg").addClass('handpan-nav-active')
     }
 }
+
