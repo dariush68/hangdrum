@@ -3,6 +3,8 @@
   --svgcolor: darkGrey;
   --loopIndicatorcolor: #0a53be40;
   --noteColor: darkgrey;
+  --rightHandColor: darkgrey;
+  --leftHandColor: darkgrey;
 }
 
 .note{

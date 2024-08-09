@@ -11,12 +11,13 @@
 - [x] seen counter
 - [x] R/L hand indicator
 - [x] show tone-field in hang-drum when play
+- [x] support clear note with delete key
 - 
+- [ ] support r/l hand ui
 - [ ] registration
 - [ ] delete sheet by owner
 - [ ] edit sheet by owner
 - [ ] support right number
-- [ ] support clear note with delete key
 - [ ] tempo input
 - [ ] support 6/8
 - [ ] login-less usage

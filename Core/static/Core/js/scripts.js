@@ -7,6 +7,7 @@ let pauseInterrupt = false;
 let selectedSheetNotes = null
 let isLoopActive = false
 let isRepeatOne = true
+let isRightHand = true
 
 let loopStartIndex = null
 let loopEndIndex = null
@@ -113,6 +114,14 @@ document.addEventListener('keydown', function (event) {
 
     console.log(event.keyCode)
     // console.log(event.shiftKey)
+    if(event.shiftKey === true && isRightHand === true){
+        isRightHand = false;
+        selectHand();
+    }
+    else if(isRightHand === false){
+        isRightHand = true;
+        selectHand();
+    }
 
     switch (event.keyCode) {
         //-- "1"
@@ -151,6 +160,14 @@ document.addEventListener('keydown', function (event) {
         //-- "D"
         case 68:
             $(`#${currentNoteId}`).text('D');
+            break;
+        //-- Esc
+        case 27:
+        //-- backspace
+        case 8:
+        //-- Del
+        case 46:
+            $(`#${currentNoteId}`).text('-');
             break;
         //-- "Left Arrow"
         case 37:
@@ -350,6 +367,14 @@ function playNoteSequenceJson(tempo) {
     playNextNote(); // Start the sequence
 }
 
+function selectHand(){
+    if(isRightHand){
+        console.log("right")
+    }
+    else{
+        console.log("left")
+    }
+}
 
 /*
 * Semibreve (whole note): 4
