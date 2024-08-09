@@ -10,8 +10,7 @@
 - [x] loop player
 - [x] seen counter
 - [x] R/L hand indicator
-- 
-- [ ] show tone-field in hang-drum when play
+- [x] show tone-field in hang-drum when play
 - 
 - [ ] registration
 - [ ] delete sheet by owner

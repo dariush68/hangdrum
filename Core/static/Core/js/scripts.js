@@ -319,6 +319,7 @@ function playNoteSequenceJson(tempo) {
                 const url = noteList[`${noteMapping}`]
                 // console.log(url)
                 const audio = new Audio(`${url}`);
+                playHangdrumNote(`${noteMapping}`);
                 audio.play();
             });
 
