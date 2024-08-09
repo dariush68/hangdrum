@@ -383,6 +383,7 @@ function selectPlayIndicatorPlace(bar, bit) {
     }
 }
 
+//-- select note via hang-drum
 document.querySelectorAll('.section').forEach(section => {
     section.addEventListener('click', function (event) {
         const sectionNumber = this.getAttribute('data-section');
@@ -393,6 +394,24 @@ document.querySelectorAll('.section').forEach(section => {
         currentNoteId = null;
     });
 });
+
+//-- select note via hang-drum
+document.querySelectorAll('.drum-note , .drum-dome, .drum-knock').forEach(section => {
+    section.addEventListener('click', function (event) {
+        const sectionNumber = this.getAttribute('data-section');
+        // Handle the section click as needed
+        $(`#${currentNoteId}`).text(sectionNumber);
+        // $('.note').parent().removeClass('note-selected')
+        // currentNoteId = null;
+    });
+});
+
+
+function selectNoteViaHangdrum(note){
+    $(`#${currentNoteId}`).text(note);
+    $('.note').parent().removeClass('note-selected')
+    currentNoteId = null;
+}
 
 // console.log(getBarBitCord('note-bar-1-bit-8-1'))
 
@@ -653,17 +672,20 @@ function changeLoopMode() {
         $("#hfhfhfhg").removeClass('handpan-nav-active')
         $("#loopIconSecondary").removeClass('handpan-nav-active')
 
-        // if(isLoopActive)
-        startCell.classList.remove('loop-active');
-        endCell.classList.remove('loop-active');
+        if(startCell !== null) {
+            startCell.classList.remove('loop-active');
+            endCell.classList.remove('loop-active');
+        }
     } else {
         isLoopActive = true;
         // console.log(isLoopActive)
         $("#hfhfhfhg").addClass('handpan-nav-active')
         $("#loopIconSecondary").addClass('handpan-nav-active')
 
-        startCell.classList.add('loop-active');
-        endCell.classList.add('loop-active');
+        if(startCell !== null) {
+            startCell.classList.add('loop-active');
+            endCell.classList.add('loop-active');
+        }
     }
 }
 
