@@ -2,12 +2,17 @@
 :root {
   --svgcolor: darkGrey;
   --loopIndicatorcolor: #0a53be40;
+  --noteColor: darkgrey;
 }
 
 .note{
     text-decoration: none;
-    color: darkgrey;
+    color: var(--noteColor);
     margin: 0px;
+}
+
+.note-left-hand{
+    --noteColor: limegreen;
 }
 
 
@@ -17,7 +22,7 @@
 
 .loop-selected {
     background-color: #0a53be20;
-    color: white;
+    color: green;
 }
 .loop-start-indicator {
     border-left-style: solid;

@@ -57,6 +57,11 @@ function CheckSelectedSheet() {
 
                 const cord_view_1 = `note-view-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-1`;
                 $(`#${cord_view_1}`).text(sheetJson[i].cord[0].note);
+
+                if(sheetJson[i].cord[0].hand === "L") {
+                    $(`#${cord_1}`).addClass('note-left-hand')
+                    $(`#${cord_view_1}`).addClass('note-left-hand')
+                }
             }
             if (sheetJson[i].cord[1] !== undefined) {
                 const cord_2 = `note-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-2`;
@@ -64,6 +69,11 @@ function CheckSelectedSheet() {
                 //console.log(cord_2)
                 const cord_view_2 = `note-view-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-2`;
                 $(`#${cord_view_2}`).text(sheetJson[i].cord[1].note);
+
+                if(sheetJson[i].cord[1].hand === "L") {
+                    $(`#${cord_2}`).addClass('note-left-hand')
+                    $(`#${cord_view_2}`).addClass('note-left-hand')
+                }
             }
             if (sheetJson[i].cord[2] !== undefined) {
                 const cord_3 = `note-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-3`;
@@ -71,6 +81,11 @@ function CheckSelectedSheet() {
                 //console.log(cord_3)
                 const cord_view_3 = `note-view-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-3`;
                 $(`#${cord_view_3}`).text(sheetJson[i].cord[2].note);
+
+                if(sheetJson[i].cord[2].hand === "L") {
+                    $(`#${cord_3}`).addClass('note-left-hand')
+                    $(`#${cord_view_3}`).addClass('note-left-hand')
+                }
             }
             // $(`#note-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-${sheetJson[i].cord[0]}`)
         }
@@ -96,12 +111,14 @@ document.addEventListener('keydown', function (event) {
 
     // console.log(currentNoteId)
 
-    // console.log(event.keyCode)
+    console.log(event.keyCode)
+    // console.log(event.shiftKey)
 
     switch (event.keyCode) {
         //-- "1"
         case 49:
             $(`#${currentNoteId}`).text(1);
+            if(event.shiftKey)$(`#${currentNoteId}`).addClass('note-left-hand')
             break;
         //-- "2"
         case 50:

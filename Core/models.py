@@ -12,6 +12,7 @@ class MusicSheet(models.Model):
     last_modified_date = models.DateTimeField(null=True, blank=True)
     sheet = models.TextField(max_length=10000, help_text="music sheet")
     title = models.CharField(max_length=700, null=False, blank=False, help_text="sheet name")
+    tempo = models.IntegerField(default=120, help_text="tempo number")
     is_show = models.BooleanField(default=False)
 
     def __str__(self):

@@ -6,13 +6,14 @@
 - [x] my sheet tab
 - [x] play mode and edit mode  (show only note in play mode)
 - [x] pause button function
+- [x] timeline indicator with play
+- [x] loop player
+- [x] seen counter
+- [x] R/L hand indicator
 - 
-- [ ] timeline indicator with play (show tone-field in hang-drum)
+- [ ] show tone-field in hang-drum when play
 - 
-- [ ] R/L hand indicator
-- [ ] loop player
 - [ ] registration
-- [ ] seen counter
 - [ ] delete sheet by owner
 - [ ] edit sheet by owner
 - [ ] support right number
@@ -20,4 +21,7 @@
 - [ ] tempo input
 - [ ] support 6/8
 - [ ] login-less usage
-- [ ] support unde/redo
+- [ ] support undo/redo
+- [ ] hand-pan blog
+- [ ] add help to app
+- [ ] generate note via play hang-drum
