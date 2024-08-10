@@ -106,6 +106,16 @@ function CheckSelectedSheet() {
 /*
 *
 * */
+
+document.addEventListener('keyup', function(event) {
+    if (event.key === 'Control') {
+        console.log('Shift key released');
+        isRightHand = true;
+        selectHand();
+    }
+
+});
+
 document.addEventListener('keydown', function (event) {
 
     if (currentNoteId == null) return;
@@ -114,12 +124,8 @@ document.addEventListener('keydown', function (event) {
 
     console.log(event.keyCode)
     // console.log(event.shiftKey)
-    if(event.shiftKey === true && isRightHand === true){
+    if(event.ctrlKey === true){
         isRightHand = false;
-        selectHand();
-    }
-    else if(isRightHand === false){
-        isRightHand = true;
         selectHand();
     }
 
@@ -127,39 +133,56 @@ document.addEventListener('keydown', function (event) {
         //-- "1"
         case 49:
             $(`#${currentNoteId}`).text(1);
-            if(event.shiftKey)$(`#${currentNoteId}`).addClass('note-left-hand')
+            if(event.ctrlKey) $(`#${currentNoteId}`).addClass('note-left-hand')
+            else $(`#${currentNoteId}`).removeClass('note-left-hand')
             break;
         //-- "2"
         case 50:
             $(`#${currentNoteId}`).text(2);
+            if(event.ctrlKey)$(`#${currentNoteId}`).addClass('note-left-hand')
+            else $(`#${currentNoteId}`).removeClass('note-left-hand')
             break;
         //-- "3"
         case 51:
             $(`#${currentNoteId}`).text(3);
+            if(event.ctrlKey)$(`#${currentNoteId}`).addClass('note-left-hand')
+            else $(`#${currentNoteId}`).removeClass('note-left-hand')
             break;
         //-- "4"
         case 52:
             $(`#${currentNoteId}`).text(4);
+            if(event.ctrlKey)$(`#${currentNoteId}`).addClass('note-left-hand')
+            else $(`#${currentNoteId}`).removeClass('note-left-hand')
             break;
         //-- "5"
         case 53:
             $(`#${currentNoteId}`).text(5);
+            if(event.ctrlKey)$(`#${currentNoteId}`).addClass('note-left-hand')
+            else $(`#${currentNoteId}`).removeClass('note-left-hand')
             break;
         //-- "6"
         case 54:
             $(`#${currentNoteId}`).text(6);
+            if(event.ctrlKey)$(`#${currentNoteId}`).addClass('note-left-hand')
+            else $(`#${currentNoteId}`).removeClass('note-left-hand')
             break;
         //-- "7"
         case 55:
             $(`#${currentNoteId}`).text(7);
+            if(event.ctrlKey)$(`#${currentNoteId}`).addClass('note-left-hand')
+            else $(`#${currentNoteId}`).removeClass('note-left-hand')
             break;
         //-- "8"
         case 56:
             $(`#${currentNoteId}`).text(8);
+            if(event.ctrlKey)$(`#${currentNoteId}`).addClass('note-left-hand')
+            else $(`#${currentNoteId}`).removeClass('note-left-hand')
             break;
         //-- "D"
         case 68:
             $(`#${currentNoteId}`).text('D');
+            if(event.ctrlKey)$(`#${currentNoteId}`).addClass('note-left-hand')
+            else $(`#${currentNoteId}`).removeClass('note-left-hand')
             break;
         //-- Esc
         case 27:
@@ -187,6 +210,11 @@ document.addEventListener('keydown', function (event) {
             break;
     }
 
+    if(event.ctrlKey){
+
+        event.preventDefault();    // Prevent default browser behavior
+        event.stopPropagation();   // Stop event from propagating
+    }
 
 }, true);
 
@@ -283,6 +311,8 @@ function playNoteSequenceJson(tempo) {
 
     const notes = selectedSheetNotes;
 
+    // console.log(notes)
+
     changePlayButton(true);
 
     const baseDelay = (60 / tempo) * 1000; // Base delay for a crotchet (quarter note)
@@ -330,6 +360,9 @@ function playNoteSequenceJson(tempo) {
             colorizeSelectedBarBit(notes[currentPlayIndex].bar, notes[currentPlayIndex].bit);
 
             chord.forEach(item => {
+
+                // console.log(item)
+
                 let noteMapping = item.note;
                 if (noteMapping === "N") return;
                 // console.log("noteMapping:"+noteMapping)
@@ -337,6 +370,8 @@ function playNoteSequenceJson(tempo) {
                 // console.log(url)
                 const audio = new Audio(`${url}`);
                 playHangdrumNote(`${noteMapping}`);
+                // console.log(`hand in js: ${item.hand}`)
+                selectHand(item.hand === "R" ? true : false);
                 audio.play();
             });
 
@@ -367,12 +402,19 @@ function playNoteSequenceJson(tempo) {
     playNextNote(); // Start the sequence
 }
 
-function selectHand(){
+function selectHand(_isRightHand = null){
+
+    console.log(`hand: ${_isRightHand}`)
+
+    if(_isRightHand !== null) isRightHand = _isRightHand
+
     if(isRightHand){
-        console.log("right")
+        $('#hang-drum-hands').addClass('hang-drum-right-hand');
+        $('#hang-drum-hands').removeClass('hang-drum-left-hand');
     }
     else{
-        console.log("left")
+        $('#hang-drum-hands').addClass('hang-drum-left-hand');
+        $('#hang-drum-hands').removeClass('hang-drum-right-hand');
     }
 }
 
@@ -520,7 +562,7 @@ function sheet2json() {
                 "bit": itms[1],
                 "cord": itms[2],
                 "weight": 4,
-                "hand": "R",
+                "hand": $(item).hasClass("note-left-hand") ? "L" : "R",
             };
         }
 

@@ -17,6 +17,14 @@
     --noteColor: mediumseagreen;
 }
 
+.hang-drum-left-hand{
+    --leftHandColor: mediumseagreen;
+}
+
+.hang-drum-right-hand{
+    --rightHandColor: mediumseagreen;
+}
+
 
 .note-div:hover {
     background-color: lightblue;

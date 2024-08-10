@@ -12,8 +12,8 @@
 - [x] R/L hand indicator
 - [x] show tone-field in hang-drum when play
 - [x] support clear note with delete key
+- [x] support r/l hand ui
 - 
-- [ ] support r/l hand ui
 - [ ] registration
 - [ ] delete sheet by owner
 - [ ] edit sheet by owner
@@ -25,3 +25,4 @@
 - [ ] hand-pan blog
 - [ ] add help to app
 - [ ] generate note via play hang-drum
+- [ ] change DB
