@@ -3,16 +3,25 @@
 - [x] save sheet
 - [x] load sheet
 - [x] login
+- [x] my sheet tab
+- [x] play mode and edit mode  (show only note in play mode)
+- [x] pause button function
+- [x] timeline indicator with play
+- [x] loop player
+- [x] seen counter
+- [x] R/L hand indicator
+- [x] show tone-field in hang-drum when play
+- [x] support clear note with delete key
 - 
-- [ ] my sheet tab
-- 
-- [ ] R/L hand indicator
-- [ ] timeline indicator with play (show tone-field in hang-drum)
-- [ ] loop player
+- [ ] support r/l hand ui
 - [ ] registration
-- [ ] seen counter
 - [ ] delete sheet by owner
 - [ ] edit sheet by owner
-- [ ] play mode and edit mode  (show only note in play mode)
 - [ ] support right number
-- [ ] support clear note with delete key
+- [ ] tempo input
+- [ ] support 6/8
+- [ ] login-less usage
+- [ ] support undo/redo
+- [ ] hand-pan blog
+- [ ] add help to app
+- [ ] generate note via play hang-drum

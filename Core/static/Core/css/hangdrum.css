@@ -1,0 +1,55 @@
+
+  .hang-drum {
+    /* width: 300px;
+    height: 300px; */
+
+    width: 100%;
+    height: auto;
+    max-width: 600px;
+    margin: 0 auto;
+    display: block;
+  }
+
+  .drum-body {
+    /* fill: #654321; */
+    fill: #03a9f430;
+    stroke: #03a9f4;
+    stroke-width: 3;
+  }
+
+  .drum-dome {
+    fill: #03a9f480;
+    stroke: #03a9f4;
+    stroke-width: 2;
+  }
+
+  .drum-note {
+    fill: #5677fc90;
+    stroke: #03a9f4;
+    stroke-width: 2;
+    cursor: pointer;
+  }
+
+
+.drum-knock {
+    fill: #5677fc20;
+    stroke: #03a9f430; /*#b8860b;*/
+    stroke-width: 1;
+    cursor: pointer;
+    opacity: 1; /* Hide the knock areas visually, but keep them clickable */
+  }
+
+.drum-text{
+    fill: #1d1f1d;
+    /* opacity: 0.1; */
+    font-size: 14px;
+    text-anchor: middle;
+    dominant-baseline: middle;
+}
+  /* .drum-note text, .drum-knock text, .drum-dome text {
+    fill: #03a9f4;
+    color: #03a9f4;
+    font-size: 12px;
+    text-anchor: middle;
+    dominant-baseline: middle;
+  } */

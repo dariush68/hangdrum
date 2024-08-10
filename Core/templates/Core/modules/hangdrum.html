@@ -1,0 +1,85 @@
+{% load static %}
+
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'Core/css/hangdrum.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+    <!-- hands -->
+    <div title="Hold Shift key to select left hand" class="d-flex justify-content-center">
+
+        <svg width="40px" height="40px" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <path d="M80,320V144a32,32,0,0,1,32-32h0a32,32,0,0,1,32,32V256"
+                  style="fill:none;stroke:var(--leftHandColor);stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"/>
+            <path d="M144,256V80a32,32,0,0,1,32-32h0a32,32,0,0,1,32,32V240"
+                  style="fill:none;stroke:var(--leftHandColor);stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"/>
+            <path d="M272,241V96a32,32,0,0,1,32-32h0a32,32,0,0,1,32,32V320"
+                  style="fill:none;stroke:var(--leftHandColor);stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"/>
+            <path d="M208,240V48a32,32,0,0,1,32-32h0a32,32,0,0,1,32,32V240"
+                  style="fill:none;stroke:var(--leftHandColor);stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"/>
+            <path d="M80,320c0,117.4,64,176,152,176s123.71-39.6,144-88l52.71-144c6.66-18.05,3.64-34.79-11.87-43.6h0c-15.52-8.82-35.91-4.28-44.31,11.68L336,320"
+                  style="fill:none;stroke:var(--leftHandColor);stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"/>
+        </svg>
+        <svg width="40px" height="40px" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <path d="M432,320V144a32,32,0,0,0-32-32h0a32,32,0,0,0-32,32V256"
+                  style="fill:none;stroke:var(--rightHandColor);stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"/>
+            <path d="M368,256V80a32,32,0,0,0-32-32h0a32,32,0,0,0-32,32V240"
+                  style="fill:none;stroke:var(--rightHandColor);stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"/>
+            <path d="M240,241V96a32,32,0,0,0-32-32h0a32,32,0,0,0-32,32V320"
+                  style="fill:none;stroke:var(--rightHandColor);stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"/>
+            <path d="M304,240V48a32,32,0,0,0-32-32h0a32,32,0,0,0-32,32V240"
+                  style="fill:none;stroke:var(--rightHandColor);stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"/>
+            <path d="M432,320c0,117.4-64,176-152,176s-123.71-39.6-144-88L83.33,264c-6.66-18.05-3.64-34.79,11.87-43.6h0c15.52-8.82,35.91-4.28,44.31,11.68L176,320"
+                  style="fill:none;stroke:var(--rightHandColor);stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"/>
+        </svg>
+
+    </div>
+
+    <!-- hang-drum -->
+    <svg class="hang-drum" viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet">
+        <circle cx="100" cy="100" r="90" class="drum-body"/>
+
+        <text x="73" y="102" class="drum-text">T</text>
+        <text x="127" y="102" class="drum-text">K</text>
+        <circle cx="100" cy="100" r="40" class="drum-dome" id="side" data-section="T"/>
+
+        <text x="148" y="52" class="drum-text">7</text>
+        <circle cx="150" cy="50" r="15" class="drum-note" id="note7" data-section="7"/>
+        <text x="148" y="155" class="drum-text">3</text>
+        <circle cx="150" cy="150" r="15" class="drum-note" id="note3" data-section="3"/>
+        <text x="170" y="102" class="drum-text">5</text>
+        <circle cx="170" cy="100" r="15" class="drum-note" id="note5" data-section="5"/>
+        <text x="99" y="172" class="drum-text">1</text>
+        <circle cx="100" cy="170" r="15" class="drum-note" id="note1" data-section="1"/>
+        <text x="48" y="152" class="drum-text">2</text>
+        <circle cx="50" cy="150" r="15" class="drum-note" id="note2" data-section="2"/>
+        <text x="28" y="102" class="drum-text">4</text>
+        <circle cx="30" cy="100" r="15" class="drum-note" id="note4" data-section="4"/>
+        <text x="49" y="52" class="drum-text">6</text>
+        <circle cx="50" cy="50" r="15" class="drum-note" id="note6" data-section="6"/>
+        <text x="99" y="31" class="drum-text">8</text>
+        <circle cx="100" cy="30" r="15" class="drum-note" id="note8" data-section="8"/>
+        <text x="99" y="102" class="drum-text">D</text>
+        <circle cx="100" cy="100" r="15" class="drum-note" id="ding" data-section="D"/>
+
+        <!-- Additional knock areas -->
+        <circle cx="120" cy="145" r="5" class="drum-knock" id="slapLeft" data-section="S"/>
+        <circle cx="80" cy="145" r="5" class="drum-knock" id="slapRight" data-section="S"/>
+
+        <ellipse cx="163" cy="130" rx="14" ry="6" class="drum-knock" transform="rotate(115, 168, 133)" id="knockLeft"
+                 data-section="K"/>
+        <ellipse cx="20" cy="135" rx="14" ry="6" class="drum-knock" transform="rotate(70, 27, 138)" id="knockRight"
+                 data-section="K"/>
+
+    </svg>
+
+{% endblock content %}
+
+
+{% block script %}
+    <script src="{% static 'Core/js/3party/gsap.min.js' %}"></script>
+    <script src="{% static 'Core/js/module/hangdrum.js' %}"></script>
+{% endblock script %}

@@ -1,9 +1,65 @@
 
+:root {
+  --svgcolor: darkGrey;
+  --loopIndicatorcolor: #0a53be40;
+  --noteColor: darkgrey;
+  --rightHandColor: darkgrey;
+  --leftHandColor: darkgrey;
+}
+
 .note{
     text-decoration: none;
-    color: darkgrey;
+    color: var(--noteColor);
     margin: 0px;
 }
+
+.note-left-hand{
+    --noteColor: mediumseagreen;
+}
+
+
+.note-div:hover {
+    background-color: lightblue;
+}
+
+.loop-selected {
+    background-color: #0a53be20;
+    color: green;
+}
+.loop-start-indicator {
+    border-left-style: solid;
+    border-left-width: 2px;
+    border-top-style: solid;
+    border-top-width: 2px;
+    border-bottom-style: solid;
+    border-bottom-width: 2px;
+    border-left-color: var(--loopIndicatorcolor);
+    border-top-color: var(--loopIndicatorcolor);
+    border-bottom-color: var(--loopIndicatorcolor);
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+.loop-end-indicator {
+    border-right-style: solid !important;
+    border-right-width: 2px !important;
+    border-bottom-style: solid;
+    border-bottom-width: 2px;
+    border-top-style: solid;
+    border-top-width: 2px;
+    border-right-color: var(--loopIndicatorcolor) !important;
+    border-bottom-color: var(--loopIndicatorcolor);
+    border-top-color: var(--loopIndicatorcolor);
+    border-bottom-right-radius: 3px;
+    border-top-right-radius: 3px;
+}
+
+.loop-active {
+    fill: orangered;
+    --svgcolor:orangered;
+    --loopIndicatorcolor: #0a53bea0;
+}
+
+
 .note-green{
     text-decoration: none;
     color: limegreen;
@@ -15,6 +71,23 @@
     font-weight: bold;
     /*padding: 2px;*/
 }
+
+.current-bar-border{
+    border:1px solid rgba(255, 140, 0, .6) !important
+}
+
+.current-bit-body{
+    /*border:1px solid darkorange !important*/
+    background-color: rgba(255, 140, 0, .3); //darkorange;
+    color: white;
+}
+
+.handpan-nav-active {
+    fill: orangered;
+    --svgcolor:orangered;
+}
+
+
 
 /*body {*/
 /*    font-family: Arial, sans-serif;*/

@@ -32,7 +32,7 @@ function GetSheetList() {
         $('#div-sheet-list').empty();
 
         for (let i = 0; i < data.count; i++) {
-            console.log(data.results[i].author)
+            //console.log(data.results[i].author)
             $('#div-sheet-list').append(`
                 <div class="card mt-2">
                     <div class="card-body">
@@ -64,21 +64,22 @@ function GetSheetItem(sheetId, cb) {
     let url = "api/v1/sheet-list/" + sheetId + "/";
 
     getWithToken(url, (data) => {
-        // console.log(data)
-        // SheetList = data.results;
-        cb(data)
+        console.log(data)
+        cb(data);
     });
 }
 
 
 function SelectSheet(sheetId) {
+    console.log("SelectSheet:")
     console.log(SheetList[sheetId].title)
-    // selectedSheet = SheetList[sheetId]
 
+    //-- get selected sheet
     GetSheetItem(SheetList[sheetId].id, (data)=>{
         selectedSheet = data;
-        console.log(data)
-    });
+        selectFromMenu('app');
+    })
+
 
 }
 

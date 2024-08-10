@@ -1,9 +1,20 @@
 let currentNoteId = null;
 let currentBur = 1; //-- bar number
 let isPlaying = false
+let isViewMode = true
+let currentPlayIndex = 0;
+let pauseInterrupt = false;
+let selectedSheetNotes = null
+let isLoopActive = false
+let isRepeatOne = true
+let isRightHand = true
+
+let loopStartIndex = null
+let loopEndIndex = null
 
 document.getElementById('btnAddBar').addEventListener('click', addBar);
 document.getElementById('btnPlay').addEventListener('click', play);
+document.getElementById('btnPause').addEventListener('click', pause);
 
 
 var myModal = new bootstrap.Modal(document.getElementById('myModal'))
@@ -12,22 +23,31 @@ var modalSaveSheet = new bootstrap.Modal(document.getElementById('modalSaveSheet
 //-- check sheet is selected for loading
 function CheckSelectedSheet() {
     if (selectedSheet != null) {
-        console.log("selectedSheet")
-        console.log(selectedSheet)
+        // console.log("selectedSheet")
+        // console.log(selectedSheet)
+
+        //-- provide note json data
+        // selectedSheetNotes = sheet2json();
+        // console.log(selectedSheetNotes)
+
+        //-- draw sheet
         const sheetJson = JSON.parse(selectedSheet.sheet)
-        console.log(sheetJson)
+        // console.log(sheetJson)
+
+        $('#sheet-info').empty().append(`${selectedSheet.title}`)
 
         const maxBarCount = parseInt(sheetJson[sheetJson.length - 1].bar);
         //console.log(maxBarCount)
 
         $("#note-sheet").empty();
+        $("#note-sheet-view").empty();
         currentBur = 1;
         for (let i = 1; i <= maxBarCount; i++) {
             addBar();
         }
 
         //-- set notes
-        for (let i = 0; i <= sheetJson.length; i++) {
+        for (let i = 0; i < sheetJson.length; i++) {
             //console.log(`----${i}------`)
             //console.log(sheetJson[i])
             //note-bar-2-bit-1-1
@@ -35,19 +55,48 @@ function CheckSelectedSheet() {
                 const cord_1 = `note-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-1`;
                 $(`#${cord_1}`).text(sheetJson[i].cord[0].note);
                 //console.log(cord_1)
+
+                const cord_view_1 = `note-view-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-1`;
+                $(`#${cord_view_1}`).text(sheetJson[i].cord[0].note);
+
+                if(sheetJson[i].cord[0].hand === "L") {
+                    $(`#${cord_1}`).addClass('note-left-hand')
+                    $(`#${cord_view_1}`).addClass('note-left-hand')
+                }
             }
             if (sheetJson[i].cord[1] !== undefined) {
                 const cord_2 = `note-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-2`;
                 $(`#${cord_2}`).text(sheetJson[i].cord[1].note);
                 //console.log(cord_2)
+                const cord_view_2 = `note-view-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-2`;
+                $(`#${cord_view_2}`).text(sheetJson[i].cord[1].note);
+
+                if(sheetJson[i].cord[1].hand === "L") {
+                    $(`#${cord_2}`).addClass('note-left-hand')
+                    $(`#${cord_view_2}`).addClass('note-left-hand')
+                }
             }
             if (sheetJson[i].cord[2] !== undefined) {
                 const cord_3 = `note-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-3`;
                 $(`#${cord_3}`).text(sheetJson[i].cord[2].note);
                 //console.log(cord_3)
+                const cord_view_3 = `note-view-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-3`;
+                $(`#${cord_view_3}`).text(sheetJson[i].cord[2].note);
+
+                if(sheetJson[i].cord[2].hand === "L") {
+                    $(`#${cord_3}`).addClass('note-left-hand')
+                    $(`#${cord_view_3}`).addClass('note-left-hand')
+                }
             }
             // $(`#note-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-${sheetJson[i].cord[0]}`)
         }
+
+        //-- provide note json data
+        selectedSheetNotes = sheet2json();
+        // console.log(selectedSheetNotes)
+
+        //-- add logic for loop managing
+        manageLoopHandler();
     }
 
 }
@@ -61,14 +110,24 @@ document.addEventListener('keydown', function (event) {
 
     if (currentNoteId == null) return;
 
-    console.log(currentNoteId)
+    // console.log(currentNoteId)
 
-    // console.log(event.keyCode)
+    console.log(event.keyCode)
+    // console.log(event.shiftKey)
+    if(event.shiftKey === true && isRightHand === true){
+        isRightHand = false;
+        selectHand();
+    }
+    else if(isRightHand === false){
+        isRightHand = true;
+        selectHand();
+    }
 
     switch (event.keyCode) {
         //-- "1"
         case 49:
             $(`#${currentNoteId}`).text(1);
+            if(event.shiftKey)$(`#${currentNoteId}`).addClass('note-left-hand')
             break;
         //-- "2"
         case 50:
@@ -101,6 +160,14 @@ document.addEventListener('keydown', function (event) {
         //-- "D"
         case 68:
             $(`#${currentNoteId}`).text('D');
+            break;
+        //-- Esc
+        case 27:
+        //-- backspace
+        case 8:
+        //-- Del
+        case 46:
+            $(`#${currentNoteId}`).text('-');
             break;
         //-- "Left Arrow"
         case 37:
@@ -199,22 +266,68 @@ function upIndex(noteId) {
     return newId;
 }
 
+function colorizeSelectedBarBit(bar, bit) {
 
-function playNoteSequenceJson(notes, tempo) {
+    //-- play indicator
+    $('.handpan-note-sheet').removeClass('current-bar-border').removeClass('border').addClass('border')
+    $(`#note-view-bar-${bar}`).removeClass('border').addClass('current-bar-border');
+    $(`#note-bar-${bar}`).removeClass('border').addClass('current-bar-border');
+
+    //-- highligte bar
+    $('.handpan-note-sheet-bar').removeClass('current-bit-body')
+    $(`#note-bar-${bar}-bit-${bit}-1`).parent().parent().addClass('current-bit-body');
+    $(`#note-view-bar-${bar}-bit-${bit}-1`).parent().parent().addClass('current-bit-body');
+}
+
+function playNoteSequenceJson(tempo) {
+
+    const notes = selectedSheetNotes;
 
     changePlayButton(true);
 
-    let index = 0;
     const baseDelay = (60 / tempo) * 1000; // Base delay for a crotchet (quarter note)
 
     function playNextNote() {
-        if (index < notes.length) {
+
+        //-- check pause
+        if (pauseInterrupt) {
+            pauseInterrupt = false;
+            return;
+        }
+
+        if (isLoopActive) {
+
+            let bar = Number(notes[currentPlayIndex].bar) - 1
+            let bit = Number(notes[currentPlayIndex].bit) - 1
+            let currentDivIndex = (bar * 16) + bit;
+
+            // console.log(`loopStartIndex:${loopStartIndex}, loopEndIndex:${loopEndIndex} --> currentDivIndex:${currentDivIndex}`)
+            // console.log(`bar:${bar}, bit:${bit}`)
+
+            //-- manage loop play
+            while (currentDivIndex < loopStartIndex) {
+                currentPlayIndex++;
+                bar = Number(notes[currentPlayIndex].bar) - 1
+                bit = Number(notes[currentPlayIndex].bit) - 1
+                currentDivIndex = (bar * 16) + bit;
+            }
+
+            while (currentDivIndex > loopEndIndex && currentPlayIndex < notes.length) {
+                currentPlayIndex = notes.length;
+            }
+        }
+
+        if (currentPlayIndex < notes.length) {
+
             // const note = notes[index].trim().toUpperCase();
             // const chord = notes[index].split(' ').map(note => note.trim().toUpperCase());
-            const chord = notes[index].cord;
+            const chord = notes[currentPlayIndex].cord;
 
-            const duration = notes[index].weight;
+            const duration = notes[currentPlayIndex].weight;
             const delay = baseDelay * duration; // Adjust delay based on duration
+
+            //-- play indicator
+            colorizeSelectedBarBit(notes[currentPlayIndex].bar, notes[currentPlayIndex].bit);
 
             chord.forEach(item => {
                 let noteMapping = item.note;
@@ -223,14 +336,30 @@ function playNoteSequenceJson(notes, tempo) {
                 const url = noteList[`${noteMapping}`]
                 // console.log(url)
                 const audio = new Audio(`${url}`);
+                playHangdrumNote(`${noteMapping}`);
                 audio.play();
             });
 
-            index++;
+            currentPlayIndex++;
             setTimeout(playNextNote, delay); // Set timeout for the next note
             // audio.onended = playNextNote; // Play the next note after the current one ends
         } else {
-            changePlayButton(false);
+
+            //-- check repeat
+            if(isRepeatOne === false){
+
+                currentPlayIndex = 0;
+                setTimeout(playNextNote, 0);
+            }
+            else {
+
+                changePlayButton(false);
+                currentPlayIndex = 0;
+
+                //-- reset borders
+                $('.handpan-note-sheet').removeClass('current-bar-border').removeClass('border').addClass('border')
+                $('.handpan-note-sheet-bar').removeClass('current-bit-body')
+            }
         }
 
     }
@@ -238,6 +367,14 @@ function playNoteSequenceJson(notes, tempo) {
     playNextNote(); // Start the sequence
 }
 
+function selectHand(){
+    if(isRightHand){
+        console.log("right")
+    }
+    else{
+        console.log("left")
+    }
+}
 
 /*
 * Semibreve (whole note): 4
@@ -255,6 +392,24 @@ function selectNote(noteId) {
     // myModal.show()
 }
 
+function selectPlayIndicatorPlace(bar, bit) {
+
+    //-- in edit mode div applied after view mode, so sub 15
+    // if(isViewMode === false) bar = bar - 14;
+
+    // console.log(selectedSheetNotes.length)
+    for (let i = 0; i < selectedSheetNotes.length; i++) {
+        // console.log(`i:${i}, bar:${selectedSheetNotes[i]['bar']}, bit:${selectedSheetNotes[i]['bit']}`)
+        if (selectedSheetNotes[i]['bar'] === bar.toString() && selectedSheetNotes[i]['bit'] === bit.toString()) {
+            currentPlayIndex = i;
+            // if(isLoopActive) colorizeLoopIndicator(bar, bit);
+            colorizeSelectedBarBit(bar, bit);
+            break;
+        }
+    }
+}
+
+//-- select note via hang-drum
 document.querySelectorAll('.section').forEach(section => {
     section.addEventListener('click', function (event) {
         const sectionNumber = this.getAttribute('data-section');
@@ -266,6 +421,24 @@ document.querySelectorAll('.section').forEach(section => {
     });
 });
 
+//-- select note via hang-drum
+document.querySelectorAll('.drum-note , .drum-dome, .drum-knock').forEach(section => {
+    section.addEventListener('click', function (event) {
+        const sectionNumber = this.getAttribute('data-section');
+        // Handle the section click as needed
+        $(`#${currentNoteId}`).text(sectionNumber);
+        // $('.note').parent().removeClass('note-selected')
+        // currentNoteId = null;
+    });
+});
+
+
+function selectNoteViaHangdrum(note){
+    $(`#${currentNoteId}`).text(note);
+    $('.note').parent().removeClass('note-selected')
+    currentNoteId = null;
+}
+
 // console.log(getBarBitCord('note-bar-1-bit-8-1'))
 
 initSheet();
@@ -273,20 +446,20 @@ initSheet();
 //-- empty sheet
 function initSheet() {
     $("#note-sheet").empty();
-    console.log("empty sheet")
+    $("#note-sheet-view").empty();
+    //console.log("empty sheet")
     addBar();
 }
 
-//-- ad bar
+//-- add bar
 function addBar() {
 
     const barId = currentBur++;
 
-    console.log(`barId=${barId}`)
+    //console.log(`barId=${barId}`)
 
-    $("#note-sheet").append(`
-        <div id="note-bar-${barId}" class="row border rounded mt-1"></div>
-    `);
+    $("#note-sheet").append(`<div id="note-bar-${barId}" class="row border rounded mt-1 handpan-note-sheet"></div>`);
+    $("#note-sheet-view").append(`<div id="note-view-bar-${barId}" class="row border rounded mt-1 handpan-note-sheet"></div>`);
 
     for (let i = 1; i <= 16; i++) {
         // console.log(i)
@@ -294,10 +467,18 @@ function addBar() {
         if (i % 4 === 0) isBorder = "border-end";
 
         $(`#note-bar-${barId}`).append(`
-            <div class="col ${isBorder}">
-                <div class="d-flex justify-content-center "><a id="note-bar-${barId}-bit-${i}-1" href="#" onclick="selectNote('note-bar-${barId}-bit-${i}-1')" class="note">-</a></div>
+            <div class="col ${isBorder} p-0 m-0  handpan-note-sheet-bar note-div">
+                <div class="d-flex justify-content-center"><a id="note-bar-${barId}-bit-${i}-1" href="#" onclick="selectNote('note-bar-${barId}-bit-${i}-1')" class="note">-</a></div>
                 <div class="d-flex justify-content-center"><a id="note-bar-${barId}-bit-${i}-2" href="#" onclick="selectNote('note-bar-${barId}-bit-${i}-2')" class="note">-</a></div>
                 <div class="d-flex justify-content-center"><a id="note-bar-${barId}-bit-${i}-3" href="#" onclick="selectNote('note-bar-${barId}-bit-${i}-3')" class="note">-</a></div>
+            </div>
+        `);
+
+        $(`#note-view-bar-${barId}`).append(`
+            <div class="col ${isBorder} p-0 m-0 handpan-note-sheet-bar note-view-div">
+                <div class="d-flex justify-content-center"><a id="note-view-bar-${barId}-bit-${i}-1" href="#" class="note" onclick="selectPlayIndicatorPlace(${barId}, ${i})"></a></div>
+                <div class="d-flex justify-content-center"><a id="note-view-bar-${barId}-bit-${i}-2" href="#" class="note" onclick="selectPlayIndicatorPlace(${barId}, ${i})"></a></div>
+                <div class="d-flex justify-content-center"><a id="note-view-bar-${barId}-bit-${i}-3" href="#" class="note" onclick="selectPlayIndicatorPlace(${barId}, ${i})"></a></div>
             </div>
         `);
     }
@@ -420,12 +601,22 @@ function sheet2json() {
 
 //-- play sheet
 function play() {
-    console.log("start play")
-    console.log(currentBur)
+    // console.log("start play")
+    // console.log(currentBur)
 
-    const notes = sheet2json();
-    console.log(notes)
-    playNoteSequenceJson(notes, 120);
+    if (isLoopActive) {
+
+    }
+
+    playNoteSequenceJson(120);
+}
+
+//-- pause sheet
+function pause() {
+    // console.log("start pause")
+    // console.log(currentBur)
+    pauseInterrupt = true;
+    changePlayButton(false);
 }
 
 //-- parse bar, bit and code from id
@@ -442,7 +633,7 @@ function getBarBitCord(itemId) {
 //-- change play button shape
 function changePlayButton(is_play) {
     isPlaying = is_play
-    console.log(is_play)
+    // console.log(is_play)
     if (is_play !== true) {
         $("#btnPause").addClass('d-none')
         $("#btnPlay").removeClass('d-none')
@@ -452,7 +643,7 @@ function changePlayButton(is_play) {
     }
 }
 
-function riseSaveSheetModal(){
+function riseSaveSheetModal() {
 
     modalSaveSheet.show()
 }
@@ -461,25 +652,81 @@ function riseSaveSheetModal(){
 function saveSheet() {
 
     const sheetTitle = $("#inputSheetName").val()
-    console.log(`sheetTitle=${sheetTitle}`)
+    // console.log(`sheetTitle=${sheetTitle}`)
 
     modalSaveSheet.hide();
 
     const sheet = sheet2json();
-    console.log(`sheet:${sheet}`)
-    console.log(sheet)
+    // console.log(`sheet:${sheet}`)
+    // console.log(sheet)
     // return
     const data = {
         "title": sheetTitle,
-        "author": 1,
+        "author_id": 1,
         "last_modified_date": formatDate(Date.now()),
         "sheet": JSON.stringify(sheet)
     };
-    console.log(`data:${data}`);
+    // console.log(`data:${data}`);
 
 
     postWithToken("api/v1/sheet-list/", data, (data) => {
-        console.log(data)
+        // console.log(data)
         riseToast();
     });
 }
+
+function changeSheetViewMode() {
+
+    if (isViewMode) {
+        isViewMode = false;
+        $('#note-sheet-view').addClass('d-none');
+        $('#note-sheet').removeClass('d-none');
+        $('#btnAddBar').removeClass('d-none');
+    } else {
+        isViewMode = true;
+        $('#note-sheet').addClass('d-none');
+        $('#note-sheet-view').removeClass('d-none');
+        $('#btnAddBar').addClass('d-none');
+    }
+}
+
+function changeLoopMode() {
+
+    if (isLoopActive === true) {
+        isLoopActive = false;
+        // console.log(isLoopActive)
+        $("#hfhfhfhg").removeClass('handpan-nav-active')
+        $("#loopIconSecondary").removeClass('handpan-nav-active')
+
+        if(startCell !== null) {
+            startCell.classList.remove('loop-active');
+            endCell.classList.remove('loop-active');
+        }
+    } else {
+        isLoopActive = true;
+        // console.log(isLoopActive)
+        $("#hfhfhfhg").addClass('handpan-nav-active')
+        $("#loopIconSecondary").addClass('handpan-nav-active')
+
+        if(startCell !== null) {
+            startCell.classList.add('loop-active');
+            endCell.classList.add('loop-active');
+        }
+    }
+}
+
+function changeRepeatMode() {
+
+    let url = $('#img-repeate').attr('src');
+
+    if (isRepeatOne === true) {
+        isRepeatOne = false;
+        url = url.replace('repeat-one', 'repeat')
+        $("#img-repeate").attr("src", url);
+    } else {
+        isRepeatOne = true;
+        url = url.replace('repeat', 'repeat-one')
+        $("#img-repeate").attr("src", url);
+    }
+}
+
