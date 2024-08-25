@@ -21,7 +21,6 @@ def index(request):
 
 class MusicSheetViewset(viewsets.ModelViewSet):
     queryset = models.MusicSheet.objects.all()
-    # serializer_class = serializer.MusicSheetSerializer
     pagination_class = StandardResultsSetPagination
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,]
 
@@ -42,6 +41,10 @@ class MusicSheetViewset(viewsets.ModelViewSet):
         return serializer.MusicSheetDetailSerializer
 
     def retrieve(self, request, *args, **kwargs):
+        # Allow access to retrieve method for unauthenticated users
+        if not request.user.is_authenticated:
+            self.permission_classes = []  # Override to allow access
+
         instance = self.get_object()
 
         # Increment the view count
