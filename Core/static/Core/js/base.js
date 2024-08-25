@@ -5,6 +5,22 @@ const _base_url = "http://127.0.0.1:8000/"
 var selectedSheet = null;
 
 
+function get(endPoint, cb, language = null) {
+
+    $.ajax({
+        url: _base_url + endPoint,
+        headers: {
+            'Http-Accept-Language': language == null ? 'fa' : language
+        },
+        type: "GET",
+        tokenFlag: true,
+        success: function (data) {
+            // console.log(data);
+            if (cb) return cb(data)
+        },
+    }); // end ajax
+}
+
 function getWithToken(endPoint, cb, language = null) {
     /*
        Hitting an API endpoint, By sending access token in header of an API request
