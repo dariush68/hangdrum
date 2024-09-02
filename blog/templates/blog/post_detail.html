@@ -6,52 +6,67 @@
 
 {% block content %}
 
-    <h1>{{ post.title }}</h1>
+    <div class="container">
 
-    {% if post.featured_image %}
-        <img src="{{ post.featured_image.url }}" alt="{{ post.title }}">
-    {% endif %}
-
-    <p>{{ post.created_at }}</p>
-    <div>
-        {{ post.content|safe }}
-    </div>
-
-    <h2>Comments</h2>
-
-    <div class="comments">
-        {% for comment in post.comments.filter(active=True, parent__isnull=True) %}
-    <div class="comment">
-        <p><strong>{{ comment.name or comment.user }}</strong> said on {{ comment.created_on }}:</p>
-        <p>{{ comment.body }}</p>
-
-        <!-- Reply to comment form -->
-        <a href="javascript:void(0);" onclick="document.getElementById('reply-form-{{ comment.id }}').style.display='block'">Reply</a>
-        <div id="reply-form-{{ comment.id }}" style="display:none;">
-            <form method="post" action="{% url 'add_comment_reply' post.id comment.id %}">
-                {% csrf_token %}
-                {{ reply_form.as_p }}
-                <button type="submit">Submit Reply</button>
-            </form>
+        <div class="w-100 mt-5 d-flex flex-wrap justify-content-center">
+            <span class="badge bg-info m-1 rounded">{% for cat in post.categories.all %}{{ cat }}{% endfor %}</span>
         </div>
 
-        <!-- Displaying Replies -->
-        {% for reply in comment.replies.filter(active=True) %}
-            <div class="comment-reply">
-                <p><strong>{{ reply.name or reply.user }}</strong> replied on {{ reply.created_on }}:</p>
-                <p>{{ reply.body }}</p>
-            </div>
-        {% endfor %}
-    </div>
-{% endfor %}
+        <div class=" mt-3 d-flex flex-wrap justify-content-center">
+            <h1>{{ post.title }}</h1>
+        </div>
+        <div class=" mt-2 d-flex flex-wrap justify-content-center">
+            <p>{{ post.created_at }}</p>
+        </div>
+
+
+
+        {% if post.featured_image %}
+            <img class="mt-5 rounded" style="width: 100%; object-fit: cover" src="{{ post.featured_image.url }}" alt="{{ post.title }}">
+        {% endif %}
+
+        <div class="mt-5">
+            {{ post.content|safe }}
+        </div>
+
+        <h2>Comments</h2>
+
+        <div class="comments">
+            {% for comment in comments %}
+                <div class="comment">
+                    <p><strong>{{ comment.author }}</strong> said on {{ comment.created_on }}:</p>
+                    <p>{{ comment.body }}</p>
+
+                    <!-- Reply to comment form -->
+                    <a href="javascript:void(0);"
+                       onclick="document.getElementById('reply-form-{{ comment.id }}').style.display='block'">Reply</a>
+                    <div id="reply-form-{{ comment.id }}" style="display:none;">
+                        <form method="post" action="{% url 'add_comment_reply' post.id comment.id %}">
+                            {% csrf_token %}
+                            {{ reply_form.as_p }}
+                            <button type="submit">Submit Reply</button>
+                        </form>
+                    </div>
+
+                    <!-- Displaying Replies -->
+                    {% for reply in comment.replies %}
+                        <div class="comment-reply">
+                            <p><strong>{{ reply.author }}</strong> replied on {{ reply.created_on }}:</p>
+                            <p>{{ reply.body }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+
+        </div>
+
+        <h3>Leave a comment</h3>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Submit</button>
+        </form>
 
     </div>
-
-    <h3>Leave a comment</h3>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Submit</button>
-    </form>
 
 {% endblock %}
