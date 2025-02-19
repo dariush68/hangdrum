@@ -79,10 +79,22 @@ WSGI_APPLICATION = 'hangdrum.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'hangproDb',
+        'USER': 'hangproUser',
+        'PASSWORD': 'Hang1Pro2',
+        'HOST': '91.216.171.53',
+        'PORT': '3306',
     }
 }
 
