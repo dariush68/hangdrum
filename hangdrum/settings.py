@@ -25,8 +25,16 @@ SECRET_KEY = 'django-insecure-@b2+z=go$b1$qu3yrrg1)q8fnu(j_vll9r*5^gr-!w2kw@50a1
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
-
+# ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['.hangpro.ir', '127.0.0.1']
+# ALLOWED_HOSTS = ['*']
+# CORS_ORIGIN_ALLOW_ALL = True
+# todo: block cors
+CORS_ALLOWED_ORIGINS = [
+    'https://hangpro.ir',
+    'http://hangpro.ir',
+    # 'http://127.0.0.1'
+]
 
 # Application definition
 
