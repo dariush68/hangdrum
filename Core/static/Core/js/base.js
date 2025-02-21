@@ -7,6 +7,8 @@ var selectedSheet = null;
 
 function get(endPoint, cb, language = null) {
 
+    console.log(`url ${_base_url}`)
+
     $.ajax({
         url: _base_url + endPoint,
         headers: {
