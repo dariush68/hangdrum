@@ -27,6 +27,9 @@ function getWithToken(endPoint, cb, language = null) {
     /*
        Hitting an API endpoint, By sending access token in header of an API request
    */
+
+    console.log(`url ${_base_url}`)
+
     $.ajax({
         url: _base_url + endPoint,
         headers: {
