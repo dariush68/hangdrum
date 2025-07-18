@@ -120,10 +120,6 @@ document.addEventListener('keydown', function (event) {
 
     if (currentNoteId == null) return;
 
-    // console.log(currentNoteId)
-
-    console.log(event.keyCode)
-    // console.log(event.shiftKey)
     if(event.ctrlKey === true){
         isRightHand = false;
         selectHand();
