@@ -42,6 +42,9 @@ function playHangdrumNote(note, isLeft = false) {
             if (isLeft === true) animateNote($("#slapLeft"));
             else animateNote($("#slapRight"));
             break;
+        case "P":
+            animateNote($("#pulmMute"));
+            break;
     }
 }
 
@@ -54,7 +57,11 @@ function animateNote(note) {
         repeat: 1,
         yoyo: true,
         ease: 'power1.inOut',
-        onStart: () => playSound(note.id),
+        onStart: () => {
+            console.log("play sound")
+            console.log(note.id)
+            playSound(note.id)
+        },
         onComplete: () => gsap.to(note, {fill: "#5677fc90", duration: 1.2}) // Reset color
     });
 }
@@ -75,7 +82,11 @@ notes.forEach(note => {
             repeat: 1,
             yoyo: true,
             ease: 'power1.inOut',
-            onStart: () => playSound(note.id),
+            onStart: () => {
+                console.log("play sound")
+                console.log(note.id)
+                playSound(note.id)
+            },
             onComplete: () => gsap.to(note, {fill: "#5677fc90", duration: 1.2}) // Reset color
         });
     });
@@ -85,6 +96,28 @@ notes.forEach(note => {
 function playSound(noteId) {
 //   const audio = new Audio(`sounds/${noteId}.mp3`);
 //   audio.play();
+
+    let noteMapping = noteId //item.note;
+    if (noteMapping === "N") return;
+    // console.log("noteMapping:"+noteMapping)
+    if(noteMapping === "ding") noteMapping = "D";
+    else if(noteMapping === "note1") noteMapping = "1";
+    else if(noteMapping === "note2") noteMapping = "2";
+    else if(noteMapping === "note3") noteMapping = "3";
+    else if(noteMapping === "note4") noteMapping = "4";
+    else if(noteMapping === "note5") noteMapping = "5";
+    else if(noteMapping === "note6") noteMapping = "6";
+    else if(noteMapping === "note7") noteMapping = "7";
+    else if(noteMapping === "note8") noteMapping = "8";
+    else if(noteMapping === "pulmMute") noteMapping = "P";
+    else if(noteMapping === "side") noteMapping = "T";
+    else if(noteMapping === "dingField") noteMapping = "d";
+    else if(noteMapping === "Fist") noteMapping = "F";
+    else if(noteMapping === "knockRight" || noteMapping === "knockLeft") noteMapping = "K";
+    else if(noteMapping === "slapRight" || noteMapping === "slapLeft") noteMapping = "S";
+    const url = noteList[`${noteMapping}`]
+    const audio = new Audio(`${url}`);
+    audio.play();
 }
 
 // Add click event to play the animation and sound

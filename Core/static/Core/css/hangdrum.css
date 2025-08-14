@@ -39,10 +39,26 @@
     opacity: 1; /* Hide the knock areas visually, but keep them clickable */
   }
 
+.drum-fist {
+    fill: #5677fc20;
+    stroke: #03a9f490; /*#b8860b;*/
+    stroke-width: 1;
+    cursor: pointer;
+    opacity: 1; /* Hide the knock areas visually, but keep them clickable */
+  }
+
 .drum-text{
     fill: #1d1f1d;
     /* opacity: 0.1; */
     font-size: 14px;
+    text-anchor: middle;
+    dominant-baseline: middle;
+}
+
+.drum-text-small{
+    fill: #1d1f1d;
+    opacity: 0.2;
+    font-size: 8px;
     text-anchor: middle;
     dominant-baseline: middle;
 }

@@ -460,7 +460,7 @@ document.querySelectorAll('.section').forEach(section => {
 });
 
 //-- select note via hang-drum
-document.querySelectorAll('.drum-note , .drum-dome, .drum-knock').forEach(section => {
+document.querySelectorAll('.drum-note , .drum-dome, .drum-knock, .drum-fist').forEach(section => {
     section.addEventListener('click', function (event) {
         const sectionNumber = this.getAttribute('data-section');
         // Handle the section click as needed
@@ -646,7 +646,7 @@ function play() {
 
     }
 
-    playNoteSequenceJson(120);
+    playNoteSequenceJson(90);
 }
 
 //-- pause sheet

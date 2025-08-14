@@ -13,7 +13,15 @@
 - [x] show tone-field in hang-drum when play
 - [x] support clear note with delete key
 - [x] support r/l hand ui
-- 
+- [x] slap sound
+
+- [ ] copy sheet line
+- [ ] T/K, K seperation
+- [ ] slap, knok shortkey
+- [ ] slap note text on sheet
+- [ ] delete track
+- [ ] play when edit
+- [ ] set repeat sheet line
 - [ ] registration
 - [ ] delete sheet by owner
 - [ ] edit sheet by owner
