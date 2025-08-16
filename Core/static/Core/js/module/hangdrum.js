@@ -98,7 +98,7 @@ function playSound(noteId) {
 //   audio.play();
 
     let noteMapping = noteId //item.note;
-    if (noteMapping === "N") return;
+    if (noteMapping === "E") return;
     // console.log("noteMapping:"+noteMapping)
     if(noteMapping === "ding") noteMapping = "D";
     else if(noteMapping === "note1") noteMapping = "1";
@@ -113,7 +113,7 @@ function playSound(noteId) {
     else if(noteMapping === "side") noteMapping = "T";
     else if(noteMapping === "dingField") noteMapping = "d";
     else if(noteMapping === "Fist") noteMapping = "F";
-    else if(noteMapping === "knockRight" || noteMapping === "knockLeft") noteMapping = "K";
+    else if(noteMapping === "knockRight" || noteMapping === "knockLeft") noteMapping = "N";
     else if(noteMapping === "slapRight" || noteMapping === "slapLeft") noteMapping = "S";
     const url = noteList[`${noteMapping}`]
     const audio = new Audio(`${url}`);

@@ -14,14 +14,16 @@
 - [x] support clear note with delete key
 - [x] support r/l hand ui
 - [x] slap sound
+- [x] slap, knok shortkey
+- [x] slap note text on sheet
+- [x] N issue for null and knok
+- [x] T/K, K separation
+- [x] play when edit mode
+- [x] copy sheet line
 
-- [ ] copy sheet line
-- [ ] T/K, K seperation
-- [ ] slap, knok shortkey
-- [ ] slap note text on sheet
-- [ ] delete track
-- [ ] play when edit
 - [ ] set repeat sheet line
+- [ ] delete sheet line
+- [ ] delete track
 - [ ] registration
 - [ ] delete sheet by owner
 - [ ] edit sheet by owner

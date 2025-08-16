@@ -8,11 +8,14 @@ let selectedSheetNotes = null
 let isLoopActive = false
 let isRepeatOne = true
 let isRightHand = true
+let isSheetDirty = false
 
 let loopStartIndex = null
 let loopEndIndex = null
 
-document.getElementById('btnAddBar').addEventListener('click', addBar);
+document.getElementById('btnAddBar').addEventListener('click', () => addBar(false));
+document.getElementById('btnCopyBar').addEventListener('click', () => addBar(true));
+
 document.getElementById('btnPlay').addEventListener('click', play);
 document.getElementById('btnPause').addEventListener('click', pause);
 
@@ -20,8 +23,55 @@ document.getElementById('btnPause').addEventListener('click', pause);
 var myModal = new bootstrap.Modal(document.getElementById('myModal'))
 var modalSaveSheet = new bootstrap.Modal(document.getElementById('modalSaveSheet'))
 
+function fillSheetBar(sheetJson) {
+        //console.log(`----${i}------`)
+        //console.log(sheetJson[i])
+        //note-bar-2-bit-1-1
+        if (sheetJson.cord[0] !== undefined) {
+            const cord_1 = `note-bar-${sheetJson.bar}-bit-${sheetJson.bit}-1`;
+            $(`#${cord_1}`).text(sheetJson.cord[0].note);
+            //console.log(cord_1)
+
+            const cord_view_1 = `note-view-bar-${sheetJson.bar}-bit-${sheetJson.bit}-1`;
+            $(`#${cord_view_1}`).text(sheetJson.cord[0].note);
+
+            if (sheetJson.cord[0].hand === "L") {
+                $(`#${cord_1}`).addClass('note-left-hand')
+                $(`#${cord_view_1}`).addClass('note-left-hand')
+            }
+        }
+        if (sheetJson.cord[1] !== undefined) {
+            const cord_2 = `note-bar-${sheetJson.bar}-bit-${sheetJson.bit}-2`;
+            $(`#${cord_2}`).text(sheetJson.cord[1].note);
+            //console.log(cord_2)
+            const cord_view_2 = `note-view-bar-${sheetJson.bar}-bit-${sheetJson.bit}-2`;
+            $(`#${cord_view_2}`).text(sheetJson.cord[1].note);
+
+            if (sheetJson.cord[1].hand === "L") {
+                $(`#${cord_2}`).addClass('note-left-hand')
+                $(`#${cord_view_2}`).addClass('note-left-hand')
+            }
+        }
+        if (sheetJson.cord[2] !== undefined) {
+            const cord_3 = `note-bar-${sheetJson.bar}-bit-${sheetJson.bit}-3`;
+            $(`#${cord_3}`).text(sheetJson.cord[2].note);
+            //console.log(cord_3)
+            const cord_view_3 = `note-view-bar-${sheetJson.bar}-bit-${sheetJson.bit}-3`;
+            $(`#${cord_view_3}`).text(sheetJson.cord[2].note);
+
+            if (sheetJson.cord[2].hand === "L") {
+                $(`#${cord_3}`).addClass('note-left-hand')
+                $(`#${cord_view_3}`).addClass('note-left-hand')
+            }
+        }
+        // $(`#note-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-${sheetJson[i].cord[0]}`)
+    }
+
+
 //-- check sheet is selected for loading
 function CheckSelectedSheet() {
+
+
     if (selectedSheet != null) {
         // console.log("selectedSheet")
         // console.log(selectedSheet)
@@ -32,7 +82,7 @@ function CheckSelectedSheet() {
 
         //-- draw sheet
         const sheetJson = JSON.parse(selectedSheet.sheet)
-        // console.log(sheetJson)
+        console.log(sheetJson)
 
         $('#sheet-info').empty().append(`${selectedSheet.title}`)
 
@@ -48,47 +98,7 @@ function CheckSelectedSheet() {
 
         //-- set notes
         for (let i = 0; i < sheetJson.length; i++) {
-            //console.log(`----${i}------`)
-            //console.log(sheetJson[i])
-            //note-bar-2-bit-1-1
-            if (sheetJson[i].cord[0] !== undefined) {
-                const cord_1 = `note-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-1`;
-                $(`#${cord_1}`).text(sheetJson[i].cord[0].note);
-                //console.log(cord_1)
-
-                const cord_view_1 = `note-view-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-1`;
-                $(`#${cord_view_1}`).text(sheetJson[i].cord[0].note);
-
-                if(sheetJson[i].cord[0].hand === "L") {
-                    $(`#${cord_1}`).addClass('note-left-hand')
-                    $(`#${cord_view_1}`).addClass('note-left-hand')
-                }
-            }
-            if (sheetJson[i].cord[1] !== undefined) {
-                const cord_2 = `note-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-2`;
-                $(`#${cord_2}`).text(sheetJson[i].cord[1].note);
-                //console.log(cord_2)
-                const cord_view_2 = `note-view-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-2`;
-                $(`#${cord_view_2}`).text(sheetJson[i].cord[1].note);
-
-                if(sheetJson[i].cord[1].hand === "L") {
-                    $(`#${cord_2}`).addClass('note-left-hand')
-                    $(`#${cord_view_2}`).addClass('note-left-hand')
-                }
-            }
-            if (sheetJson[i].cord[2] !== undefined) {
-                const cord_3 = `note-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-3`;
-                $(`#${cord_3}`).text(sheetJson[i].cord[2].note);
-                //console.log(cord_3)
-                const cord_view_3 = `note-view-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-3`;
-                $(`#${cord_view_3}`).text(sheetJson[i].cord[2].note);
-
-                if(sheetJson[i].cord[2].hand === "L") {
-                    $(`#${cord_3}`).addClass('note-left-hand')
-                    $(`#${cord_view_3}`).addClass('note-left-hand')
-                }
-            }
-            // $(`#note-bar-${sheetJson[i].bar}-bit-${sheetJson[i].bit}-${sheetJson[i].cord[0]}`)
+            fillSheetBar(sheetJson[i]);
         }
 
         //-- provide note json data
@@ -118,12 +128,16 @@ document.addEventListener('keyup', function(event) {
 
 document.addEventListener('keydown', function (event) {
 
+    let isAnyValidKeyPress = true;
+
     if (currentNoteId == null) return;
 
     if(event.ctrlKey === true){
         isRightHand = false;
         selectHand();
     }
+
+    console.log(event.keyCode)
 
     switch (event.keyCode) {
         //-- "1"
@@ -180,10 +194,46 @@ document.addEventListener('keydown', function (event) {
             if(event.ctrlKey)$(`#${currentNoteId}`).addClass('note-left-hand')
             else $(`#${currentNoteId}`).removeClass('note-left-hand')
             break;
+        //-- "P"
+        case 80:
+            $(`#${currentNoteId}`).text('P');
+            if(event.ctrlKey)$(`#${currentNoteId}`).addClass('note-left-hand')
+            else $(`#${currentNoteId}`).removeClass('note-left-hand')
+            break;
+        //-- "F"
+        case 70:
+            $(`#${currentNoteId}`).text('F');
+            if(event.ctrlKey)$(`#${currentNoteId}`).addClass('note-left-hand')
+            else $(`#${currentNoteId}`).removeClass('note-left-hand')
+            break;
+        //-- "S"
+        case 83:
+            $(`#${currentNoteId}`).text('S');
+            if(event.ctrlKey)$(`#${currentNoteId}`).addClass('note-left-hand')
+            else $(`#${currentNoteId}`).removeClass('note-left-hand')
+            break;
+        //-- "K"
+        case 75:
+            $(`#${currentNoteId}`).text('K');
+            if(event.ctrlKey)$(`#${currentNoteId}`).addClass('note-left-hand')
+            else $(`#${currentNoteId}`).removeClass('note-left-hand')
+            break;
+        //-- "T"
+        case 84:
+            $(`#${currentNoteId}`).text('T');
+            if(event.ctrlKey)$(`#${currentNoteId}`).addClass('note-left-hand')
+            else $(`#${currentNoteId}`).removeClass('note-left-hand')
+            break;
+        //-- "N"
+        case 78:
+            $(`#${currentNoteId}`).text('N');
+            if(event.ctrlKey)$(`#${currentNoteId}`).addClass('note-left-hand')
+            else $(`#${currentNoteId}`).removeClass('note-left-hand')
+            break;
         //-- Esc
         case 27:
-        //-- backspace
         case 8:
+        //-- backspace
         //-- Del
         case 46:
             $(`#${currentNoteId}`).text('-');
@@ -204,7 +254,12 @@ document.addEventListener('keydown', function (event) {
         case 38:
             selectNote(downIndex(currentNoteId));
             break;
+
+        default:
+            isAnyValidKeyPress = false;
     }
+
+    if(isAnyValidKeyPress) isSheetDirty = true;
 
     if(event.ctrlKey){
 
@@ -305,9 +360,17 @@ function colorizeSelectedBarBit(bar, bit) {
 
 function playNoteSequenceJson(tempo) {
 
+    if(selectedSheetNotes == null || isSheetDirty) {
+
+        isSheetDirty = false
+        //-- provide note json data
+        selectedSheetNotes = sheet2json();
+    }
+
     const notes = selectedSheetNotes;
 
-    // console.log(notes)
+    console.log("notes")
+    console.log(notes)
 
     changePlayButton(true);
 
@@ -360,7 +423,7 @@ function playNoteSequenceJson(tempo) {
                 // console.log(item)
 
                 let noteMapping = item.note;
-                if (noteMapping === "N") return;
+                if (noteMapping === "E") return;
                 // console.log("noteMapping:"+noteMapping)
                 const url = noteList[`${noteMapping}`]
                 // console.log(url)
@@ -467,6 +530,8 @@ document.querySelectorAll('.drum-note , .drum-dome, .drum-knock, .drum-fist').fo
         $(`#${currentNoteId}`).text(sectionNumber);
         // $('.note').parent().removeClass('note-selected')
         // currentNoteId = null;
+
+        isSheetDirty = true;
     });
 });
 
@@ -490,7 +555,10 @@ function initSheet() {
 }
 
 //-- add bar
-function addBar() {
+function addBar(isCopy=false) {
+
+    //-- load current sheet
+    let notes = sheet2json();
 
     const barId = currentBur++;
 
@@ -499,16 +567,28 @@ function addBar() {
     $("#note-sheet").append(`<div id="note-bar-${barId}" class="row border rounded mt-1 handpan-note-sheet"></div>`);
     $("#note-sheet-view").append(`<div id="note-view-bar-${barId}" class="row border rounded mt-1 handpan-note-sheet"></div>`);
 
+    const barIdPrev = barId - 1;
+
+    $(`#note-bar-${barId}`).append(`
+        <div class="col border-end p-0 m-0  handpan-note-sheet-bar note-div">
+            <div class="d-flex justify-content-center align-items-center h-100"><a id="note-bar-${barId}-bit-repeat" href="#" onclick="selectNote('note-bar-${barId}-bit-2')" class="note">:</a></div>
+        </div>
+    `);
+
     for (let i = 1; i <= 16; i++) {
         // console.log(i)
         let isBorder = "";
         if (i % 4 === 0) isBorder = "border-end";
 
+        const bit1 = $(`#note-bar-${barIdPrev}-bit-${i}-1`).text().trim();
+        const bit2 = $(`#note-bar-${barIdPrev}-bit-${i}-2`).text().trim();
+        const bit3 = $(`#note-bar-${barIdPrev}-bit-${i}-3`).text().trim();
+
         $(`#note-bar-${barId}`).append(`
             <div class="col ${isBorder} p-0 m-0  handpan-note-sheet-bar note-div">
-                <div class="d-flex justify-content-center"><a id="note-bar-${barId}-bit-${i}-1" href="#" onclick="selectNote('note-bar-${barId}-bit-${i}-1')" class="note">-</a></div>
-                <div class="d-flex justify-content-center"><a id="note-bar-${barId}-bit-${i}-2" href="#" onclick="selectNote('note-bar-${barId}-bit-${i}-2')" class="note">-</a></div>
-                <div class="d-flex justify-content-center"><a id="note-bar-${barId}-bit-${i}-3" href="#" onclick="selectNote('note-bar-${barId}-bit-${i}-3')" class="note">-</a></div>
+                <div class="d-flex justify-content-center"><a id="note-bar-${barId}-bit-${i}-1" href="#" onclick="selectNote('note-bar-${barId}-bit-${i}-1')" class="note">${isCopy ? bit1 : '-'}</a></div>
+                <div class="d-flex justify-content-center"><a id="note-bar-${barId}-bit-${i}-2" href="#" onclick="selectNote('note-bar-${barId}-bit-${i}-2')" class="note">${isCopy ? bit2 : '-'}</a></div>
+                <div class="d-flex justify-content-center"><a id="note-bar-${barId}-bit-${i}-3" href="#" onclick="selectNote('note-bar-${barId}-bit-${i}-3')" class="note">${isCopy ? bit3 : '-'}</a></div>
             </div>
         `);
 
@@ -519,6 +599,14 @@ function addBar() {
                 <div class="d-flex justify-content-center"><a id="note-view-bar-${barId}-bit-${i}-3" href="#" class="note" onclick="selectPlayIndicatorPlace(${barId}, ${i})"></a></div>
             </div>
         `);
+    }
+
+    if(isCopy) {
+
+        //-- provide note json data
+        selectedSheetNotes = sheet2json();
+
+        console.log(selectedSheetNotes)
     }
 }
 
@@ -540,13 +628,13 @@ function sheet2json() {
         if (val === '-' && j === 1 && cordId === 1) {
             let itms = getBarBitCord(itemId);
             if (itms[0] === '1') return {
-                "note": 'N',
+                "note": 'E',
                 "bar": itms[0],
                 "bit": itms[1],
                 "cord": itms[2],
                 "weight": 4,
                 "hand": "R",
-            }; //-- 'N' is quit
+            }; //-- 'E' is quit
         }
 
         if (val !== '-') {
@@ -720,11 +808,14 @@ function changeSheetViewMode() {
         $('#note-sheet-view').addClass('d-none');
         $('#note-sheet').removeClass('d-none');
         $('#btnAddBar').removeClass('d-none');
+        $('#btnCopyBar').removeClass('d-none');
+
     } else {
         isViewMode = true;
         $('#note-sheet').addClass('d-none');
         $('#note-sheet-view').removeClass('d-none');
         $('#btnAddBar').addClass('d-none');
+        $('#btnCopyBar').addClass('d-none');
     }
 }
 

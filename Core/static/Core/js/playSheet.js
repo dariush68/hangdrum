@@ -161,7 +161,7 @@ function playChord(chordNotes) {
 
     // Play each note in the chord
     chordNotes.forEach(note => {
-        if (note.note === "N") return; // Skip if note is empty
+        if (note.note === "E") return; // Skip if note is empty
 
         const audio = new Audio(noteList[note.note]);
         if (audio) {
@@ -214,7 +214,7 @@ function sheetToJson() {
         // Handle empty first position
         if (value === '-' && bit === 1 && cordId === 1) {
             return bar === '1' ?
-                { note: 'N', bar, bit, cord: cordId, weight: 4, hand: 'R' } :
+                { note: 'E', bar, bit, cord: cordId, weight: 4, hand: 'R' } :
                 null;
         }
 
